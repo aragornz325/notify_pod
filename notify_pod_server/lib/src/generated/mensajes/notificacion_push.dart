@@ -166,7 +166,7 @@ class _NotificacionPushImpl extends NotificacionPush {
 
 class NotificacionPushTable extends _i1.Table {
   NotificacionPushTable({super.tableRelation})
-      : super(tableName: 'notificacion_push') {
+      : super(tableName: 'serverpod_notificacion_push') {
     idCliente = _i1.ColumnString(
       'idCliente',
       this,

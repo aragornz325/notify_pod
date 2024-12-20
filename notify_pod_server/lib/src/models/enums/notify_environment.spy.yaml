@@ -1,0 +1,5 @@
+enum: NotifyEnvironment
+values:
+  - PRODUCTION
+  - STAGING
+  - DEVELOPMENT

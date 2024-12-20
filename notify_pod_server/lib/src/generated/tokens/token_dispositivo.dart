@@ -129,7 +129,7 @@ class _TokenDispositivoImpl extends TokenDispositivo {
 
 class TokenDispositivoTable extends _i1.Table {
   TokenDispositivoTable({super.tableRelation})
-      : super(tableName: 'token_dispositivo') {
+      : super(tableName: 'serverpod_token_dispositivo') {
     token = _i1.ColumnString(
       'token',
       this,
