@@ -1,0 +1,5 @@
+class: TokenDispositivo
+table: serverpod_token_dispositivo
+fields:
+    token: String
+    idCliente: String

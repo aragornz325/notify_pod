@@ -1,0 +1,5 @@
+type: module
+nickname: notify_pod
+
+client_package_path: ../notify_pod_client
+server_test_tools_path: test/integration/test_tools
