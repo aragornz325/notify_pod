@@ -12,10 +12,12 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'enums/notify_environment.dart' as _i3;
-import 'mensajes/notificacion_push.dart' as _i4;
-import 'module_class.dart' as _i5;
-import 'tokens/token_dispositivo.dart' as _i6;
+import 'exceptions/notify_pod_exception.dart' as _i4;
+import 'mensajes/notificacion_push.dart' as _i5;
+import 'module_class.dart' as _i6;
+import 'tokens/token_dispositivo.dart' as _i7;
 export 'enums/notify_environment.dart';
+export 'exceptions/notify_pod_exception.dart';
 export 'mensajes/notificacion_push.dart';
 export 'module_class.dart';
 export 'tokens/token_dispositivo.dart';
@@ -147,26 +149,32 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i3.NotifyEnvironment) {
       return _i3.NotifyEnvironment.fromJson(data) as T;
     }
-    if (t == _i4.NotificacionPush) {
-      return _i4.NotificacionPush.fromJson(data) as T;
+    if (t == _i4.NotifyPodException) {
+      return _i4.NotifyPodException.fromJson(data) as T;
     }
-    if (t == _i5.ModuleClass) {
-      return _i5.ModuleClass.fromJson(data) as T;
+    if (t == _i5.NotificacionPush) {
+      return _i5.NotificacionPush.fromJson(data) as T;
     }
-    if (t == _i6.TokenDispositivo) {
-      return _i6.TokenDispositivo.fromJson(data) as T;
+    if (t == _i6.ModuleClass) {
+      return _i6.ModuleClass.fromJson(data) as T;
+    }
+    if (t == _i7.TokenDispositivo) {
+      return _i7.TokenDispositivo.fromJson(data) as T;
     }
     if (t == _i1.getType<_i3.NotifyEnvironment?>()) {
       return (data != null ? _i3.NotifyEnvironment.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i4.NotificacionPush?>()) {
-      return (data != null ? _i4.NotificacionPush.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i4.NotifyPodException?>()) {
+      return (data != null ? _i4.NotifyPodException.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i5.ModuleClass?>()) {
-      return (data != null ? _i5.ModuleClass.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i5.NotificacionPush?>()) {
+      return (data != null ? _i5.NotificacionPush.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i6.TokenDispositivo?>()) {
-      return (data != null ? _i6.TokenDispositivo.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i6.ModuleClass?>()) {
+      return (data != null ? _i6.ModuleClass.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i7.TokenDispositivo?>()) {
+      return (data != null ? _i7.TokenDispositivo.fromJson(data) : null) as T;
     }
     try {
       return _i2.Protocol().deserialize<T>(data, t);
@@ -181,13 +189,16 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i3.NotifyEnvironment) {
       return 'NotifyEnvironment';
     }
-    if (data is _i4.NotificacionPush) {
+    if (data is _i4.NotifyPodException) {
+      return 'NotifyPodException';
+    }
+    if (data is _i5.NotificacionPush) {
       return 'NotificacionPush';
     }
-    if (data is _i5.ModuleClass) {
+    if (data is _i6.ModuleClass) {
       return 'ModuleClass';
     }
-    if (data is _i6.TokenDispositivo) {
+    if (data is _i7.TokenDispositivo) {
       return 'TokenDispositivo';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -206,14 +217,17 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'NotifyEnvironment') {
       return deserialize<_i3.NotifyEnvironment>(data['data']);
     }
+    if (dataClassName == 'NotifyPodException') {
+      return deserialize<_i4.NotifyPodException>(data['data']);
+    }
     if (dataClassName == 'NotificacionPush') {
-      return deserialize<_i4.NotificacionPush>(data['data']);
+      return deserialize<_i5.NotificacionPush>(data['data']);
     }
     if (dataClassName == 'ModuleClass') {
-      return deserialize<_i5.ModuleClass>(data['data']);
+      return deserialize<_i6.ModuleClass>(data['data']);
     }
     if (dataClassName == 'TokenDispositivo') {
-      return deserialize<_i6.TokenDispositivo>(data['data']);
+      return deserialize<_i7.TokenDispositivo>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
@@ -231,10 +245,10 @@ class Protocol extends _i1.SerializationManagerServer {
       }
     }
     switch (t) {
-      case _i4.NotificacionPush:
-        return _i4.NotificacionPush.t;
-      case _i6.TokenDispositivo:
-        return _i6.TokenDispositivo.t;
+      case _i5.NotificacionPush:
+        return _i5.NotificacionPush.t;
+      case _i7.TokenDispositivo:
+        return _i7.TokenDispositivo.t;
     }
     return null;
   }

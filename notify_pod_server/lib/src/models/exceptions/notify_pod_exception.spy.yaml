@@ -1,0 +1,5 @@
+exception: NotifyPodException
+fields:
+    title: String
+    error: String
+    stackTrace: String ?
