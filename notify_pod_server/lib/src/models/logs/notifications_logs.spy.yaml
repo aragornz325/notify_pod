@@ -1,0 +1,17 @@
+class: NotificationsLogs
+table: serverpod_notifications_logs
+fields:
+    notificationId: String
+    status: NotificationStatus
+    error: String ?
+    deviceId: int, relation(name=device_logs, parent=serverpod_devices_notify_pod)
+    attemptAt: DateTime
+    createdAt: DateTime
+    updatedAt: DateTime
+indexes:
+    idx_logs_notificationId:
+        fields: notificationId
+        type: btree
+    idx_logs_deviceId:
+        fields: deviceId
+        type: btree

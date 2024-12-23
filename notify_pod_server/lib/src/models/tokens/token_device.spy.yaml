@@ -1,0 +1,8 @@
+class: DeviceToken
+table: serverpod_device_token
+fields:
+    token: String
+    userId: String
+    type: DevicesType
+    createdAt: DateTime
+    updatedAt: DateTime

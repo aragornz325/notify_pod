@@ -1,4 +1,5 @@
 import 'package:dart_firebase_admin/auth.dart';
+import 'package:dart_firebase_admin/dart_firebase_admin.dart';
 import 'package:notify_pod_server/notify_pod_server.dart';
 import 'package:notify_pod_server/src/dependency_inyection/dependency_injection.dart';
 import 'package:notify_pod_server/src/notify_perform_operation.dart';
@@ -11,12 +12,13 @@ class NotifyPodInitializer extends NotifyPerformOperation {
     performNotifyPodOperation<void>(
       endpointName: 'NotifyPodInitializer.init',
       operation: () async {
-        final Auth auth = getAuthByEnvironment(
+        final FirebaseAdminApp admin = getAuthByEnvironment(
           notifyEnvironment: notifyEnvironment,
           logger: logger,
         );
+        
         setupNotifyDependencies(
-          auth: auth,
+          admin: admin,
         );
       },
     );

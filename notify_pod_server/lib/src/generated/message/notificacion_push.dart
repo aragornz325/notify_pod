@@ -10,36 +10,45 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
+import '../enums/notification_status.dart' as _i2;
 
 abstract class NotificacionPush
     implements _i1.TableRow, _i1.ProtocolSerialization {
   NotificacionPush._({
     this.id,
-    required this.idCliente,
-    required this.mensaje,
-    required this.idDispositivo,
-    required this.enviadoEl,
-    required this.leidoEl,
+    required this.userId,
+    required this.message,
+    required this.sendAt,
+    required this.status,
+    required this.readAt,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory NotificacionPush({
     int? id,
-    required String idCliente,
-    required String mensaje,
-    required String idDispositivo,
-    required DateTime enviadoEl,
-    required DateTime leidoEl,
+    required String userId,
+    required String message,
+    required DateTime sendAt,
+    required _i2.NotificationStatus status,
+    required DateTime readAt,
+    required DateTime createdAt,
+    required DateTime updatedAt,
   }) = _NotificacionPushImpl;
 
   factory NotificacionPush.fromJson(Map<String, dynamic> jsonSerialization) {
     return NotificacionPush(
       id: jsonSerialization['id'] as int?,
-      idCliente: jsonSerialization['idCliente'] as String,
-      mensaje: jsonSerialization['mensaje'] as String,
-      idDispositivo: jsonSerialization['idDispositivo'] as String,
-      enviadoEl:
-          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['enviadoEl']),
-      leidoEl: _i1.DateTimeJsonExtension.fromJson(jsonSerialization['leidoEl']),
+      userId: jsonSerialization['userId'] as String,
+      message: jsonSerialization['message'] as String,
+      sendAt: _i1.DateTimeJsonExtension.fromJson(jsonSerialization['sendAt']),
+      status:
+          _i2.NotificationStatus.fromJson((jsonSerialization['status'] as int)),
+      readAt: _i1.DateTimeJsonExtension.fromJson(jsonSerialization['readAt']),
+      createdAt:
+          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
+      updatedAt:
+          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
     );
   }
 
@@ -50,36 +59,44 @@ abstract class NotificacionPush
   @override
   int? id;
 
-  String idCliente;
+  String userId;
 
-  String mensaje;
+  String message;
 
-  String idDispositivo;
+  DateTime sendAt;
 
-  DateTime enviadoEl;
+  _i2.NotificationStatus status;
 
-  DateTime leidoEl;
+  DateTime readAt;
+
+  DateTime createdAt;
+
+  DateTime updatedAt;
 
   @override
   _i1.Table get table => t;
 
   NotificacionPush copyWith({
     int? id,
-    String? idCliente,
-    String? mensaje,
-    String? idDispositivo,
-    DateTime? enviadoEl,
-    DateTime? leidoEl,
+    String? userId,
+    String? message,
+    DateTime? sendAt,
+    _i2.NotificationStatus? status,
+    DateTime? readAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
-      'idCliente': idCliente,
-      'mensaje': mensaje,
-      'idDispositivo': idDispositivo,
-      'enviadoEl': enviadoEl.toJson(),
-      'leidoEl': leidoEl.toJson(),
+      'userId': userId,
+      'message': message,
+      'sendAt': sendAt.toJson(),
+      'status': status.toJson(),
+      'readAt': readAt.toJson(),
+      'createdAt': createdAt.toJson(),
+      'updatedAt': updatedAt.toJson(),
     };
   }
 
@@ -87,11 +104,13 @@ abstract class NotificacionPush
   Map<String, dynamic> toJsonForProtocol() {
     return {
       if (id != null) 'id': id,
-      'idCliente': idCliente,
-      'mensaje': mensaje,
-      'idDispositivo': idDispositivo,
-      'enviadoEl': enviadoEl.toJson(),
-      'leidoEl': leidoEl.toJson(),
+      'userId': userId,
+      'message': message,
+      'sendAt': sendAt.toJson(),
+      'status': status.toJson(),
+      'readAt': readAt.toJson(),
+      'createdAt': createdAt.toJson(),
+      'updatedAt': updatedAt.toJson(),
     };
   }
 
@@ -130,83 +149,106 @@ class _Undefined {}
 class _NotificacionPushImpl extends NotificacionPush {
   _NotificacionPushImpl({
     int? id,
-    required String idCliente,
-    required String mensaje,
-    required String idDispositivo,
-    required DateTime enviadoEl,
-    required DateTime leidoEl,
+    required String userId,
+    required String message,
+    required DateTime sendAt,
+    required _i2.NotificationStatus status,
+    required DateTime readAt,
+    required DateTime createdAt,
+    required DateTime updatedAt,
   }) : super._(
           id: id,
-          idCliente: idCliente,
-          mensaje: mensaje,
-          idDispositivo: idDispositivo,
-          enviadoEl: enviadoEl,
-          leidoEl: leidoEl,
+          userId: userId,
+          message: message,
+          sendAt: sendAt,
+          status: status,
+          readAt: readAt,
+          createdAt: createdAt,
+          updatedAt: updatedAt,
         );
 
   @override
   NotificacionPush copyWith({
     Object? id = _Undefined,
-    String? idCliente,
-    String? mensaje,
-    String? idDispositivo,
-    DateTime? enviadoEl,
-    DateTime? leidoEl,
+    String? userId,
+    String? message,
+    DateTime? sendAt,
+    _i2.NotificationStatus? status,
+    DateTime? readAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return NotificacionPush(
       id: id is int? ? id : this.id,
-      idCliente: idCliente ?? this.idCliente,
-      mensaje: mensaje ?? this.mensaje,
-      idDispositivo: idDispositivo ?? this.idDispositivo,
-      enviadoEl: enviadoEl ?? this.enviadoEl,
-      leidoEl: leidoEl ?? this.leidoEl,
+      userId: userId ?? this.userId,
+      message: message ?? this.message,
+      sendAt: sendAt ?? this.sendAt,
+      status: status ?? this.status,
+      readAt: readAt ?? this.readAt,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }
 
 class NotificacionPushTable extends _i1.Table {
   NotificacionPushTable({super.tableRelation})
-      : super(tableName: 'serverpod_notificacion_push') {
-    idCliente = _i1.ColumnString(
-      'idCliente',
+      : super(tableName: 'serverpod_push_notificacion') {
+    userId = _i1.ColumnString(
+      'userId',
       this,
     );
-    mensaje = _i1.ColumnString(
-      'mensaje',
+    message = _i1.ColumnString(
+      'message',
       this,
     );
-    idDispositivo = _i1.ColumnString(
-      'idDispositivo',
+    sendAt = _i1.ColumnDateTime(
+      'sendAt',
       this,
     );
-    enviadoEl = _i1.ColumnDateTime(
-      'enviadoEl',
+    status = _i1.ColumnEnum(
+      'status',
+      this,
+      _i1.EnumSerialization.byIndex,
+    );
+    readAt = _i1.ColumnDateTime(
+      'readAt',
       this,
     );
-    leidoEl = _i1.ColumnDateTime(
-      'leidoEl',
+    createdAt = _i1.ColumnDateTime(
+      'createdAt',
+      this,
+    );
+    updatedAt = _i1.ColumnDateTime(
+      'updatedAt',
       this,
     );
   }
 
-  late final _i1.ColumnString idCliente;
+  late final _i1.ColumnString userId;
 
-  late final _i1.ColumnString mensaje;
+  late final _i1.ColumnString message;
 
-  late final _i1.ColumnString idDispositivo;
+  late final _i1.ColumnDateTime sendAt;
 
-  late final _i1.ColumnDateTime enviadoEl;
+  late final _i1.ColumnEnum<_i2.NotificationStatus> status;
 
-  late final _i1.ColumnDateTime leidoEl;
+  late final _i1.ColumnDateTime readAt;
+
+  late final _i1.ColumnDateTime createdAt;
+
+  late final _i1.ColumnDateTime updatedAt;
 
   @override
   List<_i1.Column> get columns => [
         id,
-        idCliente,
-        mensaje,
-        idDispositivo,
-        enviadoEl,
-        leidoEl,
+        userId,
+        message,
+        sendAt,
+        status,
+        readAt,
+        createdAt,
+        updatedAt,
       ];
 }
 

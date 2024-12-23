@@ -1,0 +1,17 @@
+class: NotificacionPush
+table: serverpod_push_notificacion
+fields:
+    userId: String
+    message: String
+    sendAt: DateTime
+    status: NotificationStatus
+    readAt: DateTime
+    createdAt: DateTime
+    updatedAt: DateTime
+indexes:
+    idx_notifications_userId:
+        fields: userId
+        type: btree
+    idx_notifications_status:
+        fields: status
+        type: btree

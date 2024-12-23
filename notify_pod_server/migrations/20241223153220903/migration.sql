@@ -3,6 +3,69 @@ BEGIN;
 --
 -- ACTION CREATE TABLE
 --
+CREATE TABLE "serverpod_device_token" (
+    "id" bigserial PRIMARY KEY,
+    "token" text NOT NULL,
+    "userId" text NOT NULL,
+    "type" bigint NOT NULL,
+    "createdAt" timestamp without time zone NOT NULL,
+    "updatedAt" timestamp without time zone NOT NULL
+);
+
+--
+-- ACTION CREATE TABLE
+--
+CREATE TABLE "serverpod_devices_notify_pod" (
+    "id" bigserial PRIMARY KEY,
+    "userId" text NOT NULL,
+    "token" text NOT NULL,
+    "type" bigint NOT NULL,
+    "createdAt" text NOT NULL,
+    "updatedAt" text NOT NULL
+);
+
+-- Indexes
+CREATE INDEX "idx_devices_userId" ON "serverpod_devices_notify_pod" USING btree ("userId");
+
+--
+-- ACTION CREATE TABLE
+--
+CREATE TABLE "serverpod_notifications_logs" (
+    "id" bigserial PRIMARY KEY,
+    "notificationId" text NOT NULL,
+    "status" bigint NOT NULL,
+    "error" text,
+    "deviceId" bigint NOT NULL,
+    "attemptAt" timestamp without time zone NOT NULL,
+    "createdAt" timestamp without time zone NOT NULL,
+    "updatedAt" timestamp without time zone NOT NULL
+);
+
+-- Indexes
+CREATE INDEX "idx_logs_notificationId" ON "serverpod_notifications_logs" USING btree ("notificationId");
+CREATE INDEX "idx_logs_deviceId" ON "serverpod_notifications_logs" USING btree ("deviceId");
+
+--
+-- ACTION CREATE TABLE
+--
+CREATE TABLE "serverpod_push_notificacion" (
+    "id" bigserial PRIMARY KEY,
+    "userId" text NOT NULL,
+    "message" text NOT NULL,
+    "sendAt" timestamp without time zone NOT NULL,
+    "status" bigint NOT NULL,
+    "readAt" timestamp without time zone NOT NULL,
+    "createdAt" timestamp without time zone NOT NULL,
+    "updatedAt" timestamp without time zone NOT NULL
+);
+
+-- Indexes
+CREATE INDEX "idx_notifications_userId" ON "serverpod_push_notificacion" USING btree ("userId");
+CREATE INDEX "idx_notifications_status" ON "serverpod_push_notificacion" USING btree ("status");
+
+--
+-- ACTION CREATE TABLE
+--
 CREATE TABLE "serverpod_cloud_storage" (
     "id" bigserial PRIMARY KEY,
     "storageId" text NOT NULL,
@@ -209,6 +272,16 @@ CREATE INDEX "serverpod_session_log_isopen_idx" ON "serverpod_session_log" USING
 --
 -- ACTION CREATE FOREIGN KEY
 --
+ALTER TABLE ONLY "serverpod_notifications_logs"
+    ADD CONSTRAINT "serverpod_notifications_logs_fk_0"
+    FOREIGN KEY("deviceId")
+    REFERENCES "serverpod_devices_notify_pod"("id")
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+
+--
+-- ACTION CREATE FOREIGN KEY
+--
 ALTER TABLE ONLY "serverpod_log"
     ADD CONSTRAINT "serverpod_log_fk_0"
     FOREIGN KEY("sessionLogId")
@@ -241,9 +314,9 @@ ALTER TABLE ONLY "serverpod_query_log"
 -- MIGRATION VERSION FOR notify_pod
 --
 INSERT INTO "serverpod_migrations" ("module", "version", "timestamp")
-    VALUES ('notify_pod', '20241220155534019', now())
+    VALUES ('notify_pod', '20241223153220903', now())
     ON CONFLICT ("module")
-    DO UPDATE SET "version" = '20241220155534019', "timestamp" = now();
+    DO UPDATE SET "version" = '20241223153220903', "timestamp" = now();
 
 --
 -- MIGRATION VERSION FOR serverpod

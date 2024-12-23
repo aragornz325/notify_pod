@@ -1,0 +1,6 @@
+enum: DevicesType
+values:
+  - ANDROID
+  - IOS
+  - WEB
+  

@@ -13,6 +13,21 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 
 /// {@category Endpoint}
+class EndpointDevice extends _i1.EndpointRef {
+  EndpointDevice(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'notify_pod.device';
+
+  _i2.Future<void> registerDevice(String deviceToken) =>
+      caller.callServerEndpoint<void>(
+        'notify_pod.device',
+        'registerDevice',
+        {'deviceToken': deviceToken},
+      );
+}
+
+/// {@category Endpoint}
 class EndpointModule extends _i1.EndpointRef {
   EndpointModule(_i1.EndpointCaller caller) : super(caller);
 
@@ -28,12 +43,17 @@ class EndpointModule extends _i1.EndpointRef {
 
 class Caller extends _i1.ModuleEndpointCaller {
   Caller(_i1.ServerpodClientShared client) : super(client) {
+    device = EndpointDevice(this);
     module = EndpointModule(this);
   }
+
+  late final EndpointDevice device;
 
   late final EndpointModule module;
 
   @override
-  Map<String, _i1.EndpointRef> get endpointRefLookup =>
-      {'notify_pod.module': module};
+  Map<String, _i1.EndpointRef> get endpointRefLookup => {
+        'notify_pod.device': device,
+        'notify_pod.module': module,
+      };
 }

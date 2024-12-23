@@ -1,0 +1,11 @@
+enum: NotificationStatus
+values:
+    - SUCCESS
+    - FAILED
+    - REJECTED
+    - PENDING
+    - SENT
+    - RECEIVED
+    - READ
+    - OPENED
+

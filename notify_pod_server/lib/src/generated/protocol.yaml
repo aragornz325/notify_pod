@@ -1,2 +1,4 @@
+device:
+  - registerDevice:
 module:
   - hello:

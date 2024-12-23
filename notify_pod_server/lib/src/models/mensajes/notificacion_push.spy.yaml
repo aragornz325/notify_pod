@@ -1,8 +1,0 @@
-class: NotificacionPush
-table: serverpod_notificacion_push
-fields:
-    idCliente: String
-    mensaje: String
-    idDispositivo: String
-    enviadoEl: DateTime
-    leidoEl: DateTime
