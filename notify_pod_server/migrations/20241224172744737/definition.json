@@ -242,9 +242,9 @@
         },
         {
           "name": "notificationId",
-          "columnType": 0,
+          "columnType": 6,
           "isNullable": false,
-          "dartType": "String"
+          "dartType": "int"
         },
         {
           "name": "status",
@@ -1588,7 +1588,7 @@
   "installedModules": [
     {
       "module": "notify_pod",
-      "version": "20241224161334771"
+      "version": "20241224172744737"
     },
     {
       "module": "serverpod",

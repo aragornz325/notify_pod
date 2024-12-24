@@ -21,6 +21,14 @@ mixin Controller<T extends Service> {
       );
 
       return await operation();
+    } on DatabaseException catch (e, st) {
+      logger.shout('''
+ERROR NOTIFY POD
+Title: Database Exception in Notify Pod
+Message: ${e.toString()}
+Stack Trace: ${st.toString()}
+''');
+      rethrow;  
     } on NotifyPodException catch (e) {
       logger.shout('''
 ERROR NOTIFY POD

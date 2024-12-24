@@ -84,8 +84,8 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'message',
       endpoint: endpoints['message']!,
       methodConnectors: {
-        'sendMessageByUserId': _i1.MethodConnector(
-          name: 'sendMessageByUserId',
+        'sendPushNotificationByUserId': _i1.MethodConnector(
+          name: 'sendPushNotificationByUserId',
           params: {
             'userId': _i1.ParameterDescription(
               name: 'userId',
@@ -107,7 +107,8 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['message'] as _i3.MessageEndpoint).sendMessageByUserId(
+              (endpoints['message'] as _i3.MessageEndpoint)
+                  .sendPushNotificationByUserId(
             session,
             params['userId'],
             params['message'],

@@ -4,7 +4,7 @@ import 'package:serverpod/serverpod.dart';
 
 class MessageEndpoint extends Endpoint with Controller<NotificacionPushServices> {
 
-  Future<bool> sendMessageByUserId(
+  Future<bool> sendPushNotificationByUserId(
     Session session,
     String userId,
     String message,
@@ -14,7 +14,7 @@ class MessageEndpoint extends Endpoint with Controller<NotificacionPushServices>
       session: session,
       endpointName: 'MessageEndpoint',
       operation: () async {
-        return await service.sendMessageByUserId(
+        return await service.sendPushNotificationByUserId(
           session,
           userId: userId,
           message: message,

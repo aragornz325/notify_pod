@@ -27,7 +27,7 @@ abstract class NotificationsLogs
 
   factory NotificationsLogs({
     int? id,
-    required String notificationId,
+    required int notificationId,
     required _i2.NotificationStatus status,
     String? error,
     required int deviceId,
@@ -39,7 +39,7 @@ abstract class NotificationsLogs
   factory NotificationsLogs.fromJson(Map<String, dynamic> jsonSerialization) {
     return NotificationsLogs(
       id: jsonSerialization['id'] as int?,
-      notificationId: jsonSerialization['notificationId'] as String,
+      notificationId: jsonSerialization['notificationId'] as int,
       status:
           _i2.NotificationStatus.fromJson((jsonSerialization['status'] as int)),
       error: jsonSerialization['error'] as String?,
@@ -60,7 +60,7 @@ abstract class NotificationsLogs
   @override
   int? id;
 
-  String notificationId;
+  int notificationId;
 
   _i2.NotificationStatus status;
 
@@ -79,7 +79,7 @@ abstract class NotificationsLogs
 
   NotificationsLogs copyWith({
     int? id,
-    String? notificationId,
+    int? notificationId,
     _i2.NotificationStatus? status,
     String? error,
     int? deviceId,
@@ -150,7 +150,7 @@ class _Undefined {}
 class _NotificationsLogsImpl extends NotificationsLogs {
   _NotificationsLogsImpl({
     int? id,
-    required String notificationId,
+    required int notificationId,
     required _i2.NotificationStatus status,
     String? error,
     required int deviceId,
@@ -171,7 +171,7 @@ class _NotificationsLogsImpl extends NotificationsLogs {
   @override
   NotificationsLogs copyWith({
     Object? id = _Undefined,
-    String? notificationId,
+    int? notificationId,
     _i2.NotificationStatus? status,
     Object? error = _Undefined,
     int? deviceId,
@@ -195,7 +195,7 @@ class _NotificationsLogsImpl extends NotificationsLogs {
 class NotificationsLogsTable extends _i1.Table {
   NotificationsLogsTable({super.tableRelation})
       : super(tableName: 'serverpod_notifications_logs') {
-    notificationId = _i1.ColumnString(
+    notificationId = _i1.ColumnInt(
       'notificationId',
       this,
     );
@@ -226,7 +226,7 @@ class NotificationsLogsTable extends _i1.Table {
     );
   }
 
-  late final _i1.ColumnString notificationId;
+  late final _i1.ColumnInt notificationId;
 
   late final _i1.ColumnEnum<_i2.NotificationStatus> status;
 

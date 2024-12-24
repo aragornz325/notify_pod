@@ -242,9 +242,9 @@
         },
         {
           "name": "notificationId",
-          "columnType": 0,
+          "columnType": 6,
           "isNullable": false,
-          "dartType": "String"
+          "dartType": "int"
         },
         {
           "name": "status",

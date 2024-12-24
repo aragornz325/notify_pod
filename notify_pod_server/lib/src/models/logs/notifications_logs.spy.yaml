@@ -1,7 +1,7 @@
 class: NotificationsLogs
 table: serverpod_notifications_logs
 fields:
-    notificationId: String
+    notificationId: int
     status: NotificationStatus
     error: String ?
     deviceId: int, relation(name=device_logs, parent=serverpod_devices_notify_pod)

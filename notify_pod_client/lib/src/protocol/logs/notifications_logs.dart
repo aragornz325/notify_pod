@@ -26,7 +26,7 @@ abstract class NotificationsLogs implements _i1.SerializableModel {
 
   factory NotificationsLogs({
     int? id,
-    required String notificationId,
+    required int notificationId,
     required _i2.NotificationStatus status,
     String? error,
     required int deviceId,
@@ -38,7 +38,7 @@ abstract class NotificationsLogs implements _i1.SerializableModel {
   factory NotificationsLogs.fromJson(Map<String, dynamic> jsonSerialization) {
     return NotificationsLogs(
       id: jsonSerialization['id'] as int?,
-      notificationId: jsonSerialization['notificationId'] as String,
+      notificationId: jsonSerialization['notificationId'] as int,
       status:
           _i2.NotificationStatus.fromJson((jsonSerialization['status'] as int)),
       error: jsonSerialization['error'] as String?,
@@ -57,7 +57,7 @@ abstract class NotificationsLogs implements _i1.SerializableModel {
   /// the id will be null.
   int? id;
 
-  String notificationId;
+  int notificationId;
 
   _i2.NotificationStatus status;
 
@@ -73,7 +73,7 @@ abstract class NotificationsLogs implements _i1.SerializableModel {
 
   NotificationsLogs copyWith({
     int? id,
-    String? notificationId,
+    int? notificationId,
     _i2.NotificationStatus? status,
     String? error,
     int? deviceId,
@@ -106,7 +106,7 @@ class _Undefined {}
 class _NotificationsLogsImpl extends NotificationsLogs {
   _NotificationsLogsImpl({
     int? id,
-    required String notificationId,
+    required int notificationId,
     required _i2.NotificationStatus status,
     String? error,
     required int deviceId,
@@ -127,7 +127,7 @@ class _NotificationsLogsImpl extends NotificationsLogs {
   @override
   NotificationsLogs copyWith({
     Object? id = _Undefined,
-    String? notificationId,
+    int? notificationId,
     _i2.NotificationStatus? status,
     Object? error = _Undefined,
     int? deviceId,

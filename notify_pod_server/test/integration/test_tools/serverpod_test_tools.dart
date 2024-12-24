@@ -182,7 +182,7 @@ class _MessageEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<bool> sendMessageByUserId(
+  _i3.Future<bool> sendPushNotificationByUserId(
     _i1.TestSessionBuilder sessionBuilder,
     String userId,
     String message,
@@ -192,13 +192,13 @@ class _MessageEndpoint {
       var _localUniqueSession =
           (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
         endpoint: 'message',
-        method: 'sendMessageByUserId',
+        method: 'sendPushNotificationByUserId',
       );
       try {
         var _localCallContext = await _endpointDispatch.getMethodCallContext(
           createSessionCallback: (_) => _localUniqueSession,
           endpointPath: 'message',
-          methodName: 'sendMessageByUserId',
+          methodName: 'sendPushNotificationByUserId',
           parameters: _i1.testObjectToJson({
             'userId': userId,
             'message': message,

@@ -8,7 +8,7 @@ import 'package:serverpod/serverpod.dart';
 class NotificacionPushServices extends Service {
   final Messaging _messaging = getIt.get<Messaging>();
   final DevicesService _devicesService = getIt.get<DevicesService>();
-  Future<bool> sendMessageByUserId(
+  Future<bool> sendPushNotificationByUserId(
     Session session, {
     required String title,
     required String message,
@@ -16,82 +16,125 @@ class NotificacionPushServices extends Service {
   }) async {
     final now = DateTime.now().toUtc();
     return await performOperation<bool>(
-        operationName: 'sendMessageByUserId',
-        operation: () async {
-          final tokens = await _devicesService.getAllDevicesTokens(
-            session,
-            userId: userId,
+      operationName: 'sendMessageByUserId',
+      operation: () async {
+        final tokens = await _devicesService.getAllDevicesTokens(
+          session,
+          userId: userId,
+        );
+        if (tokens == null || tokens.isEmpty) {
+          throw NotifyPodException(
+            title: 'No devices found',
+            error: 'No devices found for user $userId',
           );
-          if (tokens == null || tokens.isEmpty) {
-            throw NotifyPodException(
-              title: 'No devices found',
-              error: 'No devices found for user $userId',
+        }
+
+        logger.fine(
+          'Registering notification for ${tokens.length} devices',
+        );
+
+        for (final token in tokens) {
+          final messageInDb = await NotificacionPush.db.insert(session, [
+            NotificacionPush(
+              deviceId: token.deviceId,
+              userId: userId,
+              title: title,
+              message: message,
+              sendAt: now,
+              createdAt: now,
+              updatedAt: now,
+              status: NotificationStatus.PENDING,
+            ),
+          ]);
+
+          try {
+            logger.fine(
+              'Sending message to ${token.deviceId}',
             );
-          }
-
-          final List<TokenMessage> tokenMessages = [];
-
-          logger.fine(
-            'registering notification for ${tokens.length} devices',
-          );
-          for (final token in tokens) {
-            await NotificacionPush.db.insert(session, [
-              NotificacionPush(
-                deviceId: token.deviceId,
-                userId: userId,
-                title: title,
-                message: message,
-                sendAt: now,
-                createdAt: now,
-                updatedAt: now,
-                status: NotificationStatus.PENDING,
-              ),
-            ]);
-          }
-          logger.fine(
-            'Preparing messages for ${tokens.length} devices',
-          );
-          tokens.map((element) {
-            tokenMessages.add(
+            await _messaging.send(
               TokenMessage(
-                token: element.token,
+                token: token.token,
                 notification: Notification(
                   title: title,
                   body: message,
                 ),
               ),
             );
-          });
-
-          final List<Future<void>> sendFutures = tokenMessages.map((
-            token,
-          ) {
-            return _messaging.send(
-              token,
-            );
-          }).toList();
-
-          logger.fine(
-            'Sending message to ${tokens.length} devices',
-          );
-          try {
-            await Future.wait(sendFutures);
             logger.fine(
-              'All messages sent successfully',
+              'Message sent to ${token.deviceId}',
             );
-            return true;
-          } catch (e, stackTrace) {
+
+            await performOperation(
+              operationName: 'update push notification status',
+              operation: () async {
+                await NotificacionPush.db.update(
+                  session,
+                  [
+                    messageInDb.first.copyWith(
+                      status: NotificationStatus.SENT,
+                      updatedAt: now,
+                    ),
+                  ],
+                );
+                await NotificationsLogs.db.insert(
+                  session,
+                  [
+                    NotificationsLogs(
+                      deviceId: token.id!,
+                      notificationId: messageInDb.first.id!,
+                      attemptAt: now,
+                      createdAt: now,
+                      updatedAt: now,
+                      status: NotificationStatus.SENT,
+                    ),
+                  ],
+                );
+              },
+            );
+          } catch (e, st) {
             logger.severe(
-              'Failed to send some or all messages',
+              'Error sending message to ${token.deviceId}',
               e,
-              stackTrace,
             );
-            throw NotifyPodException(
-              title: 'error at sending messages',
-              error: e.toString(),
-              stackTrace: stackTrace.toString(),
+
+            await performOperation(
+              operationName: 'fail on send push notification',
+              operation: () async {
+                await NotificacionPush.db.update(
+                  session,
+                  [
+                    messageInDb.first.copyWith(
+                      status: NotificationStatus.FAILED,
+                      updatedAt: DateTime.now().toUtc(),
+                    ),
+                  ],
+                );
+                await NotificationsLogs.db.insert(
+                  session,
+                  [
+                    NotificationsLogs(
+                      deviceId: token.id!,
+                      notificationId: messageInDb.first.id!,
+                      error: e.toString(),
+                      attemptAt: DateTime.now().toUtc(),
+                      createdAt: DateTime.now().toUtc(),
+                      updatedAt: DateTime.now().toUtc(),
+                      status: NotificationStatus.FAILED,
+                    ),
+                  ],
+                ).onError((e, st) {
+                  throw NotifyPodException(
+                    title: 'Failed to log notification',
+                    error: e.toString(),
+                    stackTrace: st.toString(),
+                  );
+                });
+              },
             );
           }
-        });
+        }
+        return false;
+      },
+    );
   }
 }

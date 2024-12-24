@@ -45,14 +45,14 @@ class EndpointMessage extends _i1.EndpointRef {
   @override
   String get name => 'notify_pod.message';
 
-  _i2.Future<bool> sendMessageByUserId(
+  _i2.Future<bool> sendPushNotificationByUserId(
     String userId,
     String message,
     String title,
   ) =>
       caller.callServerEndpoint<bool>(
         'notify_pod.message',
-        'sendMessageByUserId',
+        'sendPushNotificationByUserId',
         {
           'userId': userId,
           'message': message,
