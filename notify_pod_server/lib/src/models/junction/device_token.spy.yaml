@@ -1,0 +1,9 @@
+class: Register
+table: serverpod_device_token_register
+fields:
+  device: Device?, relation(name=device_register)
+  token: DeviceToken?, relation(name=deviceToken_register)
+indexes:
+  devices_token_index:
+    fields: deviceId, tokenId
+    unique: true

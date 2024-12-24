@@ -1,4 +1,7 @@
 device:
-  - registerDevice:
+  - registerFCMToken:
+message:
+  - sendMessageByUserId:
 module:
   - hello:
+  - registerFCMToken:

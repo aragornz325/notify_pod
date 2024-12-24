@@ -14,6 +14,7 @@
 import 'package:serverpod_test/serverpod_test.dart' as _i1;
 import 'package:serverpod/serverpod.dart' as _i2;
 import 'dart:async' as _i3;
+import 'package:notify_pod_server/src/generated/enums/devices_type.dart' as _i4;
 import 'package:notify_pod_server/src/generated/protocol.dart';
 import 'package:notify_pod_server/src/generated/endpoints.dart';
 export 'package:serverpod_test/serverpod_test_public_exports.dart';
@@ -96,6 +97,8 @@ void withServerpod(
 class TestEndpoints {
   late final _DeviceEndpoint device;
 
+  late final _MessageEndpoint message;
+
   late final _ModuleEndpoint module;
 }
 
@@ -107,6 +110,10 @@ class _InternalTestEndpoints extends TestEndpoints
     _i2.EndpointDispatch endpoints,
   ) {
     device = _DeviceEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    message = _MessageEndpoint(
       endpoints,
       serializationManager,
     );
@@ -127,28 +134,82 @@ class _DeviceEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<void> registerDevice(
+  _i3.Future<bool> registerFCMToken(
     _i1.TestSessionBuilder sessionBuilder,
-    String deviceToken,
+    String tokenFCM,
+    String userId,
+    String deviceId,
+    _i4.DevicesType devicesType,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
           (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
         endpoint: 'device',
-        method: 'registerDevice',
+        method: 'registerFCMToken',
       );
       try {
         var _localCallContext = await _endpointDispatch.getMethodCallContext(
           createSessionCallback: (_) => _localUniqueSession,
           endpointPath: 'device',
-          methodName: 'registerDevice',
-          parameters: _i1.testObjectToJson({'deviceToken': deviceToken}),
+          methodName: 'registerFCMToken',
+          parameters: _i1.testObjectToJson({
+            'tokenFCM': tokenFCM,
+            'userId': userId,
+            'deviceId': deviceId,
+            'devicesType': devicesType,
+          }),
           serializationManager: _serializationManager,
         );
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<void>);
+        ) as _i3.Future<bool>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _MessageEndpoint {
+  _MessageEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _i2.EndpointDispatch _endpointDispatch;
+
+  final _i2.SerializationManager _serializationManager;
+
+  _i3.Future<bool> sendMessageByUserId(
+    _i1.TestSessionBuilder sessionBuilder,
+    String userId,
+    String message,
+    String title,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'message',
+        method: 'sendMessageByUserId',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'message',
+          methodName: 'sendMessageByUserId',
+          parameters: _i1.testObjectToJson({
+            'userId': userId,
+            'message': message,
+            'title': title,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<bool>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -189,6 +250,43 @@ class _ModuleEndpoint {
           _localUniqueSession,
           _localCallContext.arguments,
         ) as _i3.Future<String>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<bool> registerFCMToken(
+    _i1.TestSessionBuilder sessionBuilder,
+    String tokenFCM,
+    String userId,
+    String deviceId,
+    _i4.DevicesType devicesType,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'module',
+        method: 'registerFCMToken',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'module',
+          methodName: 'registerFCMToken',
+          parameters: _i1.testObjectToJson({
+            'tokenFCM': tokenFCM,
+            'userId': userId,
+            'deviceId': deviceId,
+            'devicesType': devicesType,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<bool>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

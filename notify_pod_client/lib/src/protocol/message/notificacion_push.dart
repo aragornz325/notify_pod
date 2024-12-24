@@ -16,10 +16,12 @@ abstract class NotificacionPush implements _i1.SerializableModel {
   NotificacionPush._({
     this.id,
     required this.userId,
+    required this.title,
+    required this.deviceId,
     required this.message,
     required this.sendAt,
     required this.status,
-    required this.readAt,
+    this.readAt,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -27,10 +29,12 @@ abstract class NotificacionPush implements _i1.SerializableModel {
   factory NotificacionPush({
     int? id,
     required String userId,
+    required String title,
+    required String deviceId,
     required String message,
     required DateTime sendAt,
     required _i2.NotificationStatus status,
-    required DateTime readAt,
+    DateTime? readAt,
     required DateTime createdAt,
     required DateTime updatedAt,
   }) = _NotificacionPushImpl;
@@ -39,11 +43,15 @@ abstract class NotificacionPush implements _i1.SerializableModel {
     return NotificacionPush(
       id: jsonSerialization['id'] as int?,
       userId: jsonSerialization['userId'] as String,
+      title: jsonSerialization['title'] as String,
+      deviceId: jsonSerialization['deviceId'] as String,
       message: jsonSerialization['message'] as String,
       sendAt: _i1.DateTimeJsonExtension.fromJson(jsonSerialization['sendAt']),
       status:
           _i2.NotificationStatus.fromJson((jsonSerialization['status'] as int)),
-      readAt: _i1.DateTimeJsonExtension.fromJson(jsonSerialization['readAt']),
+      readAt: jsonSerialization['readAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['readAt']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       updatedAt:
@@ -58,13 +66,17 @@ abstract class NotificacionPush implements _i1.SerializableModel {
 
   String userId;
 
+  String title;
+
+  String deviceId;
+
   String message;
 
   DateTime sendAt;
 
   _i2.NotificationStatus status;
 
-  DateTime readAt;
+  DateTime? readAt;
 
   DateTime createdAt;
 
@@ -73,6 +85,8 @@ abstract class NotificacionPush implements _i1.SerializableModel {
   NotificacionPush copyWith({
     int? id,
     String? userId,
+    String? title,
+    String? deviceId,
     String? message,
     DateTime? sendAt,
     _i2.NotificationStatus? status,
@@ -85,10 +99,12 @@ abstract class NotificacionPush implements _i1.SerializableModel {
     return {
       if (id != null) 'id': id,
       'userId': userId,
+      'title': title,
+      'deviceId': deviceId,
       'message': message,
       'sendAt': sendAt.toJson(),
       'status': status.toJson(),
-      'readAt': readAt.toJson(),
+      if (readAt != null) 'readAt': readAt?.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
     };
@@ -106,15 +122,19 @@ class _NotificacionPushImpl extends NotificacionPush {
   _NotificacionPushImpl({
     int? id,
     required String userId,
+    required String title,
+    required String deviceId,
     required String message,
     required DateTime sendAt,
     required _i2.NotificationStatus status,
-    required DateTime readAt,
+    DateTime? readAt,
     required DateTime createdAt,
     required DateTime updatedAt,
   }) : super._(
           id: id,
           userId: userId,
+          title: title,
+          deviceId: deviceId,
           message: message,
           sendAt: sendAt,
           status: status,
@@ -127,20 +147,24 @@ class _NotificacionPushImpl extends NotificacionPush {
   NotificacionPush copyWith({
     Object? id = _Undefined,
     String? userId,
+    String? title,
+    String? deviceId,
     String? message,
     DateTime? sendAt,
     _i2.NotificationStatus? status,
-    DateTime? readAt,
+    Object? readAt = _Undefined,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
     return NotificacionPush(
       id: id is int? ? id : this.id,
       userId: userId ?? this.userId,
+      title: title ?? this.title,
+      deviceId: deviceId ?? this.deviceId,
       message: message ?? this.message,
       sendAt: sendAt ?? this.sendAt,
       status: status ?? this.status,
-      readAt: readAt ?? this.readAt,
+      readAt: readAt is DateTime? ? readAt : this.readAt,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

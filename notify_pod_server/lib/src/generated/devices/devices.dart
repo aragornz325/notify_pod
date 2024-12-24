@@ -12,32 +12,38 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../enums/devices_type.dart' as _i2;
 import '../logs/notifications_logs.dart' as _i3;
+import '../junction/device_token.dart' as _i4;
 
 abstract class Device implements _i1.TableRow, _i1.ProtocolSerialization {
   Device._({
     this.id,
     required this.userId,
+    required this.deviceId,
     required this.token,
     required this.type,
     this.notificationsLogs,
     required this.createdAt,
     required this.updatedAt,
+    this.register,
   });
 
   factory Device({
     int? id,
     required String userId,
+    required String deviceId,
     required String token,
     required _i2.DevicesType type,
     List<_i3.NotificationsLogs>? notificationsLogs,
     required String createdAt,
     required String updatedAt,
+    List<_i4.Register>? register,
   }) = _DeviceImpl;
 
   factory Device.fromJson(Map<String, dynamic> jsonSerialization) {
     return Device(
       id: jsonSerialization['id'] as int?,
       userId: jsonSerialization['userId'] as String,
+      deviceId: jsonSerialization['deviceId'] as String,
       token: jsonSerialization['token'] as String,
       type: _i2.DevicesType.fromJson((jsonSerialization['type'] as int)),
       notificationsLogs: (jsonSerialization['notificationsLogs'] as List?)
@@ -46,6 +52,9 @@ abstract class Device implements _i1.TableRow, _i1.ProtocolSerialization {
           .toList(),
       createdAt: jsonSerialization['createdAt'] as String,
       updatedAt: jsonSerialization['updatedAt'] as String,
+      register: (jsonSerialization['register'] as List?)
+          ?.map((e) => _i4.Register.fromJson((e as Map<String, dynamic>)))
+          .toList(),
     );
   }
 
@@ -58,6 +67,8 @@ abstract class Device implements _i1.TableRow, _i1.ProtocolSerialization {
 
   String userId;
 
+  String deviceId;
+
   String token;
 
   _i2.DevicesType type;
@@ -68,23 +79,28 @@ abstract class Device implements _i1.TableRow, _i1.ProtocolSerialization {
 
   String updatedAt;
 
+  List<_i4.Register>? register;
+
   @override
   _i1.Table get table => t;
 
   Device copyWith({
     int? id,
     String? userId,
+    String? deviceId,
     String? token,
     _i2.DevicesType? type,
     List<_i3.NotificationsLogs>? notificationsLogs,
     String? createdAt,
     String? updatedAt,
+    List<_i4.Register>? register,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
       'userId': userId,
+      'deviceId': deviceId,
       'token': token,
       'type': type.toJson(),
       if (notificationsLogs != null)
@@ -92,6 +108,8 @@ abstract class Device implements _i1.TableRow, _i1.ProtocolSerialization {
             notificationsLogs?.toJson(valueToJson: (v) => v.toJson()),
       'createdAt': createdAt,
       'updatedAt': updatedAt,
+      if (register != null)
+        'register': register?.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -100,6 +118,7 @@ abstract class Device implements _i1.TableRow, _i1.ProtocolSerialization {
     return {
       if (id != null) 'id': id,
       'userId': userId,
+      'deviceId': deviceId,
       'token': token,
       'type': type.toJson(),
       if (notificationsLogs != null)
@@ -107,12 +126,19 @@ abstract class Device implements _i1.TableRow, _i1.ProtocolSerialization {
             valueToJson: (v) => v.toJsonForProtocol()),
       'createdAt': createdAt,
       'updatedAt': updatedAt,
+      if (register != null)
+        'register': register?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
   }
 
-  static DeviceInclude include(
-      {_i3.NotificationsLogsIncludeList? notificationsLogs}) {
-    return DeviceInclude._(notificationsLogs: notificationsLogs);
+  static DeviceInclude include({
+    _i3.NotificationsLogsIncludeList? notificationsLogs,
+    _i4.RegisterIncludeList? register,
+  }) {
+    return DeviceInclude._(
+      notificationsLogs: notificationsLogs,
+      register: register,
+    );
   }
 
   static DeviceIncludeList includeList({
@@ -147,34 +173,41 @@ class _DeviceImpl extends Device {
   _DeviceImpl({
     int? id,
     required String userId,
+    required String deviceId,
     required String token,
     required _i2.DevicesType type,
     List<_i3.NotificationsLogs>? notificationsLogs,
     required String createdAt,
     required String updatedAt,
+    List<_i4.Register>? register,
   }) : super._(
           id: id,
           userId: userId,
+          deviceId: deviceId,
           token: token,
           type: type,
           notificationsLogs: notificationsLogs,
           createdAt: createdAt,
           updatedAt: updatedAt,
+          register: register,
         );
 
   @override
   Device copyWith({
     Object? id = _Undefined,
     String? userId,
+    String? deviceId,
     String? token,
     _i2.DevicesType? type,
     Object? notificationsLogs = _Undefined,
     String? createdAt,
     String? updatedAt,
+    Object? register = _Undefined,
   }) {
     return Device(
       id: id is int? ? id : this.id,
       userId: userId ?? this.userId,
+      deviceId: deviceId ?? this.deviceId,
       token: token ?? this.token,
       type: type ?? this.type,
       notificationsLogs: notificationsLogs is List<_i3.NotificationsLogs>?
@@ -182,6 +215,9 @@ class _DeviceImpl extends Device {
           : this.notificationsLogs?.map((e0) => e0.copyWith()).toList(),
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      register: register is List<_i4.Register>?
+          ? register
+          : this.register?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }
@@ -191,6 +227,10 @@ class DeviceTable extends _i1.Table {
       : super(tableName: 'serverpod_devices_notify_pod') {
     userId = _i1.ColumnString(
       'userId',
+      this,
+    );
+    deviceId = _i1.ColumnString(
+      'deviceId',
       this,
     );
     token = _i1.ColumnString(
@@ -214,6 +254,8 @@ class DeviceTable extends _i1.Table {
 
   late final _i1.ColumnString userId;
 
+  late final _i1.ColumnString deviceId;
+
   late final _i1.ColumnString token;
 
   late final _i1.ColumnEnum<_i2.DevicesType> type;
@@ -226,6 +268,10 @@ class DeviceTable extends _i1.Table {
 
   late final _i1.ColumnString updatedAt;
 
+  _i4.RegisterTable? ___register;
+
+  _i1.ManyRelation<_i4.RegisterTable>? _register;
+
   _i3.NotificationsLogsTable get __notificationsLogs {
     if (___notificationsLogs != null) return ___notificationsLogs!;
     ___notificationsLogs = _i1.createRelationTable(
@@ -237,6 +283,19 @@ class DeviceTable extends _i1.Table {
           _i3.NotificationsLogsTable(tableRelation: foreignTableRelation),
     );
     return ___notificationsLogs!;
+  }
+
+  _i4.RegisterTable get __register {
+    if (___register != null) return ___register!;
+    ___register = _i1.createRelationTable(
+      relationFieldName: '__register',
+      field: Device.t.id,
+      foreignField: _i4.Register.t.deviceId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i4.RegisterTable(tableRelation: foreignTableRelation),
+    );
+    return ___register!;
   }
 
   _i1.ManyRelation<_i3.NotificationsLogsTable> get notificationsLogs {
@@ -257,10 +316,29 @@ class DeviceTable extends _i1.Table {
     return _notificationsLogs!;
   }
 
+  _i1.ManyRelation<_i4.RegisterTable> get register {
+    if (_register != null) return _register!;
+    var relationTable = _i1.createRelationTable(
+      relationFieldName: 'register',
+      field: Device.t.id,
+      foreignField: _i4.Register.t.deviceId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i4.RegisterTable(tableRelation: foreignTableRelation),
+    );
+    _register = _i1.ManyRelation<_i4.RegisterTable>(
+      tableWithRelations: relationTable,
+      table: _i4.RegisterTable(
+          tableRelation: relationTable.tableRelation!.lastRelation),
+    );
+    return _register!;
+  }
+
   @override
   List<_i1.Column> get columns => [
         id,
         userId,
+        deviceId,
         token,
         type,
         createdAt,
@@ -272,20 +350,31 @@ class DeviceTable extends _i1.Table {
     if (relationField == 'notificationsLogs') {
       return __notificationsLogs;
     }
+    if (relationField == 'register') {
+      return __register;
+    }
     return null;
   }
 }
 
 class DeviceInclude extends _i1.IncludeObject {
-  DeviceInclude._({_i3.NotificationsLogsIncludeList? notificationsLogs}) {
+  DeviceInclude._({
+    _i3.NotificationsLogsIncludeList? notificationsLogs,
+    _i4.RegisterIncludeList? register,
+  }) {
     _notificationsLogs = notificationsLogs;
+    _register = register;
   }
 
   _i3.NotificationsLogsIncludeList? _notificationsLogs;
 
+  _i4.RegisterIncludeList? _register;
+
   @override
-  Map<String, _i1.Include?> get includes =>
-      {'notificationsLogs': _notificationsLogs};
+  Map<String, _i1.Include?> get includes => {
+        'notificationsLogs': _notificationsLogs,
+        'register': _register,
+      };
 
   @override
   _i1.Table get table => Device.t;
@@ -317,6 +406,10 @@ class DeviceRepository {
   final attach = const DeviceAttachRepository._();
 
   final attachRow = const DeviceAttachRowRepository._();
+
+  final detach = const DeviceDetachRepository._();
+
+  final detachRow = const DeviceDetachRowRepository._();
 
   Future<List<Device>> find(
     _i1.Session session, {
@@ -494,6 +587,28 @@ class DeviceAttachRepository {
       transaction: transaction,
     );
   }
+
+  Future<void> register(
+    _i1.Session session,
+    Device device,
+    List<_i4.Register> register, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (register.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('register.id');
+    }
+    if (device.id == null) {
+      throw ArgumentError.notNull('device.id');
+    }
+
+    var $register =
+        register.map((e) => e.copyWith(deviceId: device.id)).toList();
+    await session.db.update<_i4.Register>(
+      $register,
+      columns: [_i4.Register.t.deviceId],
+      transaction: transaction,
+    );
+  }
 }
 
 class DeviceAttachRowRepository {
@@ -516,6 +631,69 @@ class DeviceAttachRowRepository {
     await session.db.updateRow<_i3.NotificationsLogs>(
       $notificationsLogs,
       columns: [_i3.NotificationsLogs.t.deviceId],
+      transaction: transaction,
+    );
+  }
+
+  Future<void> register(
+    _i1.Session session,
+    Device device,
+    _i4.Register register, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (register.id == null) {
+      throw ArgumentError.notNull('register.id');
+    }
+    if (device.id == null) {
+      throw ArgumentError.notNull('device.id');
+    }
+
+    var $register = register.copyWith(deviceId: device.id);
+    await session.db.updateRow<_i4.Register>(
+      $register,
+      columns: [_i4.Register.t.deviceId],
+      transaction: transaction,
+    );
+  }
+}
+
+class DeviceDetachRepository {
+  const DeviceDetachRepository._();
+
+  Future<void> register(
+    _i1.Session session,
+    List<_i4.Register> register, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (register.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('register.id');
+    }
+
+    var $register = register.map((e) => e.copyWith(deviceId: null)).toList();
+    await session.db.update<_i4.Register>(
+      $register,
+      columns: [_i4.Register.t.deviceId],
+      transaction: transaction,
+    );
+  }
+}
+
+class DeviceDetachRowRepository {
+  const DeviceDetachRowRepository._();
+
+  Future<void> register(
+    _i1.Session session,
+    _i4.Register register, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (register.id == null) {
+      throw ArgumentError.notNull('register.id');
+    }
+
+    var $register = register.copyWith(deviceId: null);
+    await session.db.updateRow<_i4.Register>(
+      $register,
+      columns: [_i4.Register.t.deviceId],
       transaction: transaction,
     );
   }

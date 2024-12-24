@@ -11,6 +11,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../enums/devices_type.dart' as _i2;
+import '../junction/device_token.dart' as _i3;
 
 abstract class DeviceToken implements _i1.TableRow, _i1.ProtocolSerialization {
   DeviceToken._({
@@ -18,8 +19,10 @@ abstract class DeviceToken implements _i1.TableRow, _i1.ProtocolSerialization {
     required this.token,
     required this.userId,
     required this.type,
+    required this.deviceId,
     required this.createdAt,
     required this.updatedAt,
+    this.register,
   });
 
   factory DeviceToken({
@@ -27,8 +30,10 @@ abstract class DeviceToken implements _i1.TableRow, _i1.ProtocolSerialization {
     required String token,
     required String userId,
     required _i2.DevicesType type,
+    required String deviceId,
     required DateTime createdAt,
     required DateTime updatedAt,
+    List<_i3.Register>? register,
   }) = _DeviceTokenImpl;
 
   factory DeviceToken.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -37,10 +42,14 @@ abstract class DeviceToken implements _i1.TableRow, _i1.ProtocolSerialization {
       token: jsonSerialization['token'] as String,
       userId: jsonSerialization['userId'] as String,
       type: _i2.DevicesType.fromJson((jsonSerialization['type'] as int)),
+      deviceId: jsonSerialization['deviceId'] as String,
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       updatedAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
+      register: (jsonSerialization['register'] as List?)
+          ?.map((e) => _i3.Register.fromJson((e as Map<String, dynamic>)))
+          .toList(),
     );
   }
 
@@ -57,9 +66,13 @@ abstract class DeviceToken implements _i1.TableRow, _i1.ProtocolSerialization {
 
   _i2.DevicesType type;
 
+  String deviceId;
+
   DateTime createdAt;
 
   DateTime updatedAt;
+
+  List<_i3.Register>? register;
 
   @override
   _i1.Table get table => t;
@@ -69,8 +82,10 @@ abstract class DeviceToken implements _i1.TableRow, _i1.ProtocolSerialization {
     String? token,
     String? userId,
     _i2.DevicesType? type,
+    String? deviceId,
     DateTime? createdAt,
     DateTime? updatedAt,
+    List<_i3.Register>? register,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -79,8 +94,11 @@ abstract class DeviceToken implements _i1.TableRow, _i1.ProtocolSerialization {
       'token': token,
       'userId': userId,
       'type': type.toJson(),
+      'deviceId': deviceId,
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
+      if (register != null)
+        'register': register?.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -91,13 +109,16 @@ abstract class DeviceToken implements _i1.TableRow, _i1.ProtocolSerialization {
       'token': token,
       'userId': userId,
       'type': type.toJson(),
+      'deviceId': deviceId,
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
+      if (register != null)
+        'register': register?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
   }
 
-  static DeviceTokenInclude include() {
-    return DeviceTokenInclude._();
+  static DeviceTokenInclude include({_i3.RegisterIncludeList? register}) {
+    return DeviceTokenInclude._(register: register);
   }
 
   static DeviceTokenIncludeList includeList({
@@ -134,15 +155,19 @@ class _DeviceTokenImpl extends DeviceToken {
     required String token,
     required String userId,
     required _i2.DevicesType type,
+    required String deviceId,
     required DateTime createdAt,
     required DateTime updatedAt,
+    List<_i3.Register>? register,
   }) : super._(
           id: id,
           token: token,
           userId: userId,
           type: type,
+          deviceId: deviceId,
           createdAt: createdAt,
           updatedAt: updatedAt,
+          register: register,
         );
 
   @override
@@ -151,16 +176,22 @@ class _DeviceTokenImpl extends DeviceToken {
     String? token,
     String? userId,
     _i2.DevicesType? type,
+    String? deviceId,
     DateTime? createdAt,
     DateTime? updatedAt,
+    Object? register = _Undefined,
   }) {
     return DeviceToken(
       id: id is int? ? id : this.id,
       token: token ?? this.token,
       userId: userId ?? this.userId,
       type: type ?? this.type,
+      deviceId: deviceId ?? this.deviceId,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      register: register is List<_i3.Register>?
+          ? register
+          : this.register?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }
@@ -181,6 +212,10 @@ class DeviceTokenTable extends _i1.Table {
       this,
       _i1.EnumSerialization.byIndex,
     );
+    deviceId = _i1.ColumnString(
+      'deviceId',
+      this,
+    );
     createdAt = _i1.ColumnDateTime(
       'createdAt',
       this,
@@ -197,9 +232,46 @@ class DeviceTokenTable extends _i1.Table {
 
   late final _i1.ColumnEnum<_i2.DevicesType> type;
 
+  late final _i1.ColumnString deviceId;
+
   late final _i1.ColumnDateTime createdAt;
 
   late final _i1.ColumnDateTime updatedAt;
+
+  _i3.RegisterTable? ___register;
+
+  _i1.ManyRelation<_i3.RegisterTable>? _register;
+
+  _i3.RegisterTable get __register {
+    if (___register != null) return ___register!;
+    ___register = _i1.createRelationTable(
+      relationFieldName: '__register',
+      field: DeviceToken.t.id,
+      foreignField: _i3.Register.t.tokenId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i3.RegisterTable(tableRelation: foreignTableRelation),
+    );
+    return ___register!;
+  }
+
+  _i1.ManyRelation<_i3.RegisterTable> get register {
+    if (_register != null) return _register!;
+    var relationTable = _i1.createRelationTable(
+      relationFieldName: 'register',
+      field: DeviceToken.t.id,
+      foreignField: _i3.Register.t.tokenId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i3.RegisterTable(tableRelation: foreignTableRelation),
+    );
+    _register = _i1.ManyRelation<_i3.RegisterTable>(
+      tableWithRelations: relationTable,
+      table: _i3.RegisterTable(
+          tableRelation: relationTable.tableRelation!.lastRelation),
+    );
+    return _register!;
+  }
 
   @override
   List<_i1.Column> get columns => [
@@ -207,16 +279,29 @@ class DeviceTokenTable extends _i1.Table {
         token,
         userId,
         type,
+        deviceId,
         createdAt,
         updatedAt,
       ];
+
+  @override
+  _i1.Table? getRelationTable(String relationField) {
+    if (relationField == 'register') {
+      return __register;
+    }
+    return null;
+  }
 }
 
 class DeviceTokenInclude extends _i1.IncludeObject {
-  DeviceTokenInclude._();
+  DeviceTokenInclude._({_i3.RegisterIncludeList? register}) {
+    _register = register;
+  }
+
+  _i3.RegisterIncludeList? _register;
 
   @override
-  Map<String, _i1.Include?> get includes => {};
+  Map<String, _i1.Include?> get includes => {'register': _register};
 
   @override
   _i1.Table get table => DeviceToken.t;
@@ -245,6 +330,10 @@ class DeviceTokenIncludeList extends _i1.IncludeList {
 class DeviceTokenRepository {
   const DeviceTokenRepository._();
 
+  final attach = const DeviceTokenAttachRepository._();
+
+  final attachRow = const DeviceTokenAttachRowRepository._();
+
   Future<List<DeviceToken>> find(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<DeviceTokenTable>? where,
@@ -254,6 +343,7 @@ class DeviceTokenRepository {
     bool orderDescending = false,
     _i1.OrderByListBuilder<DeviceTokenTable>? orderByList,
     _i1.Transaction? transaction,
+    DeviceTokenInclude? include,
   }) async {
     return session.db.find<DeviceToken>(
       where: where?.call(DeviceToken.t),
@@ -263,6 +353,7 @@ class DeviceTokenRepository {
       limit: limit,
       offset: offset,
       transaction: transaction,
+      include: include,
     );
   }
 
@@ -274,6 +365,7 @@ class DeviceTokenRepository {
     bool orderDescending = false,
     _i1.OrderByListBuilder<DeviceTokenTable>? orderByList,
     _i1.Transaction? transaction,
+    DeviceTokenInclude? include,
   }) async {
     return session.db.findFirstRow<DeviceToken>(
       where: where?.call(DeviceToken.t),
@@ -282,6 +374,7 @@ class DeviceTokenRepository {
       orderDescending: orderDescending,
       offset: offset,
       transaction: transaction,
+      include: include,
     );
   }
 
@@ -289,10 +382,12 @@ class DeviceTokenRepository {
     _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
+    DeviceTokenInclude? include,
   }) async {
     return session.db.findById<DeviceToken>(
       id,
       transaction: transaction,
+      include: include,
     );
   }
 
@@ -386,6 +481,57 @@ class DeviceTokenRepository {
     return session.db.count<DeviceToken>(
       where: where?.call(DeviceToken.t),
       limit: limit,
+      transaction: transaction,
+    );
+  }
+}
+
+class DeviceTokenAttachRepository {
+  const DeviceTokenAttachRepository._();
+
+  Future<void> register(
+    _i1.Session session,
+    DeviceToken deviceToken,
+    List<_i3.Register> register, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (register.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('register.id');
+    }
+    if (deviceToken.id == null) {
+      throw ArgumentError.notNull('deviceToken.id');
+    }
+
+    var $register =
+        register.map((e) => e.copyWith(tokenId: deviceToken.id)).toList();
+    await session.db.update<_i3.Register>(
+      $register,
+      columns: [_i3.Register.t.tokenId],
+      transaction: transaction,
+    );
+  }
+}
+
+class DeviceTokenAttachRowRepository {
+  const DeviceTokenAttachRowRepository._();
+
+  Future<void> register(
+    _i1.Session session,
+    DeviceToken deviceToken,
+    _i3.Register register, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (register.id == null) {
+      throw ArgumentError.notNull('register.id');
+    }
+    if (deviceToken.id == null) {
+      throw ArgumentError.notNull('deviceToken.id');
+    }
+
+    var $register = register.copyWith(tokenId: deviceToken.id);
+    await session.db.updateRow<_i3.Register>(
+      $register,
+      columns: [_i3.Register.t.tokenId],
       transaction: transaction,
     );
   }

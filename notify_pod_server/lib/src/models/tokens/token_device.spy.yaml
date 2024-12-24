@@ -4,5 +4,7 @@ fields:
     token: String
     userId: String
     type: DevicesType
+    deviceId: String
     createdAt: DateTime
     updatedAt: DateTime
+    register: List<Register>?, relation(name=deviceToken_register)

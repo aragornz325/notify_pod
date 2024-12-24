@@ -8,9 +8,22 @@ CREATE TABLE "serverpod_device_token" (
     "token" text NOT NULL,
     "userId" text NOT NULL,
     "type" bigint NOT NULL,
+    "deviceId" text NOT NULL,
     "createdAt" timestamp without time zone NOT NULL,
     "updatedAt" timestamp without time zone NOT NULL
 );
+
+--
+-- Class Register as table serverpod_device_token_register
+--
+CREATE TABLE "serverpod_device_token_register" (
+    "id" bigserial PRIMARY KEY,
+    "deviceId" bigint NOT NULL,
+    "tokenId" bigint NOT NULL
+);
+
+-- Indexes
+CREATE UNIQUE INDEX "devices_token_index" ON "serverpod_device_token_register" USING btree ("deviceId", "tokenId");
 
 --
 -- Class Device as table serverpod_devices_notify_pod
@@ -18,6 +31,7 @@ CREATE TABLE "serverpod_device_token" (
 CREATE TABLE "serverpod_devices_notify_pod" (
     "id" bigserial PRIMARY KEY,
     "userId" text NOT NULL,
+    "deviceId" text NOT NULL,
     "token" text NOT NULL,
     "type" bigint NOT NULL,
     "createdAt" text NOT NULL,
@@ -51,10 +65,12 @@ CREATE INDEX "idx_logs_deviceId" ON "serverpod_notifications_logs" USING btree (
 CREATE TABLE "serverpod_push_notificacion" (
     "id" bigserial PRIMARY KEY,
     "userId" text NOT NULL,
+    "title" text NOT NULL,
+    "deviceId" text NOT NULL,
     "message" text NOT NULL,
     "sendAt" timestamp without time zone NOT NULL,
     "status" bigint NOT NULL,
-    "readAt" timestamp without time zone NOT NULL,
+    "readAt" timestamp without time zone,
     "createdAt" timestamp without time zone NOT NULL,
     "updatedAt" timestamp without time zone NOT NULL
 );
@@ -270,6 +286,22 @@ CREATE INDEX "serverpod_session_log_touched_idx" ON "serverpod_session_log" USIN
 CREATE INDEX "serverpod_session_log_isopen_idx" ON "serverpod_session_log" USING btree ("isOpen");
 
 --
+-- Foreign relations for "serverpod_device_token_register" table
+--
+ALTER TABLE ONLY "serverpod_device_token_register"
+    ADD CONSTRAINT "serverpod_device_token_register_fk_0"
+    FOREIGN KEY("deviceId")
+    REFERENCES "serverpod_devices_notify_pod"("id")
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+ALTER TABLE ONLY "serverpod_device_token_register"
+    ADD CONSTRAINT "serverpod_device_token_register_fk_1"
+    FOREIGN KEY("tokenId")
+    REFERENCES "serverpod_device_token"("id")
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+
+--
 -- Foreign relations for "serverpod_notifications_logs" table
 --
 ALTER TABLE ONLY "serverpod_notifications_logs"
@@ -314,9 +346,9 @@ ALTER TABLE ONLY "serverpod_query_log"
 -- MIGRATION VERSION FOR notify_pod
 --
 INSERT INTO "serverpod_migrations" ("module", "version", "timestamp")
-    VALUES ('notify_pod', '20241223153220903', now())
+    VALUES ('notify_pod', '20241224054323352', now())
     ON CONFLICT ("module")
-    DO UPDATE SET "version" = '20241223153220903', "timestamp" = now();
+    DO UPDATE SET "version" = '20241224054323352', "timestamp" = now();
 
 --
 -- MIGRATION VERSION FOR serverpod

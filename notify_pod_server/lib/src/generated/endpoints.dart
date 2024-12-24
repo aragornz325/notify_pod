@@ -11,7 +11,9 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../endpoints/devices/device_endpoint.dart' as _i2;
-import '../endpoints/module_endpoint.dart' as _i3;
+import '../endpoints/messages/notificacion_push_endpoint.dart' as _i3;
+import '../endpoints/module_endpoint.dart' as _i4;
+import 'package:notify_pod_server/src/generated/enums/devices_type.dart' as _i5;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -23,7 +25,13 @@ class Endpoints extends _i1.EndpointDispatch {
           'device',
           'notify_pod',
         ),
-      'module': _i3.ModuleEndpoint()
+      'message': _i3.MessageEndpoint()
+        ..initialize(
+          server,
+          'message',
+          'notify_pod',
+        ),
+      'module': _i4.ModuleEndpoint()
         ..initialize(
           server,
           'module',
@@ -34,22 +42,76 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'device',
       endpoint: endpoints['device']!,
       methodConnectors: {
-        'registerDevice': _i1.MethodConnector(
-          name: 'registerDevice',
+        'registerFCMToken': _i1.MethodConnector(
+          name: 'registerFCMToken',
           params: {
-            'deviceToken': _i1.ParameterDescription(
-              name: 'deviceToken',
+            'tokenFCM': _i1.ParameterDescription(
+              name: 'tokenFCM',
               type: _i1.getType<String>(),
               nullable: false,
-            )
+            ),
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'deviceId': _i1.ParameterDescription(
+              name: 'deviceId',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'devicesType': _i1.ParameterDescription(
+              name: 'devicesType',
+              type: _i1.getType<_i5.DevicesType>(),
+              nullable: false,
+            ),
           },
           call: (
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['device'] as _i2.DeviceEndpoint).registerDevice(
+              (endpoints['device'] as _i2.DeviceEndpoint).registerFCMToken(
             session,
-            params['deviceToken'],
+            params['tokenFCM'],
+            params['userId'],
+            params['deviceId'],
+            params['devicesType'],
+          ),
+        )
+      },
+    );
+    connectors['message'] = _i1.EndpointConnector(
+      name: 'message',
+      endpoint: endpoints['message']!,
+      methodConnectors: {
+        'sendMessageByUserId': _i1.MethodConnector(
+          name: 'sendMessageByUserId',
+          params: {
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'message': _i1.ParameterDescription(
+              name: 'message',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'title': _i1.ParameterDescription(
+              name: 'title',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['message'] as _i3.MessageEndpoint).sendMessageByUserId(
+            session,
+            params['userId'],
+            params['message'],
+            params['title'],
           ),
         )
       },
@@ -71,11 +133,47 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['module'] as _i3.ModuleEndpoint).hello(
+              (endpoints['module'] as _i4.ModuleEndpoint).hello(
             session,
             params['name'],
           ),
-        )
+        ),
+        'registerFCMToken': _i1.MethodConnector(
+          name: 'registerFCMToken',
+          params: {
+            'tokenFCM': _i1.ParameterDescription(
+              name: 'tokenFCM',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'deviceId': _i1.ParameterDescription(
+              name: 'deviceId',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'devicesType': _i1.ParameterDescription(
+              name: 'devicesType',
+              type: _i1.getType<_i5.DevicesType>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['module'] as _i4.ModuleEndpoint).registerFCMToken(
+            session,
+            params['tokenFCM'],
+            params['userId'],
+            params['deviceId'],
+            params['devicesType'],
+          ),
+        ),
       },
     );
   }

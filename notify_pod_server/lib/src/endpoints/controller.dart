@@ -6,7 +6,7 @@ import 'package:serverpod/serverpod.dart';
 
 mixin Controller<T extends Service> {
   /// Getter para clase [Servicio] vinculada.
-  T get servicio => getIt.get<T>();
+  T get service => getIt.get<T>();
 
   final logger = Logger('Notify Endpoint');
 
@@ -30,8 +30,7 @@ Stack Trace: ${e.stackTrace}
 ''');
       rethrow;
     } catch (e, stackTrace) {
-      logger.severe(
-          'Unhandled error in endpoint $endpointName', e, stackTrace);
+      logger.severe('Unhandled error in endpoint $endpointName', e, stackTrace);
       throw Exception(
         'Error in endpoint $endpointName: $e',
       );

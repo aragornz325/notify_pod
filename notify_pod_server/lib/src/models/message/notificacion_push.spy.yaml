@@ -2,10 +2,12 @@ class: NotificacionPush
 table: serverpod_push_notificacion
 fields:
     userId: String
+    title: String
+    deviceId: String
     message: String
     sendAt: DateTime
     status: NotificationStatus
-    readAt: DateTime
+    readAt: DateTime ?
     createdAt: DateTime
     updatedAt: DateTime
 indexes:

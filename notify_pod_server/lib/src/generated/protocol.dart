@@ -16,15 +16,17 @@ import 'enums/devices_type.dart' as _i4;
 import 'enums/notification_status.dart' as _i5;
 import 'enums/notify_environment.dart' as _i6;
 import 'exceptions/notify_pod_exception.dart' as _i7;
-import 'logs/notifications_logs.dart' as _i8;
-import 'message/notificacion_push.dart' as _i9;
-import 'module_class.dart' as _i10;
-import 'tokens/token_device.dart' as _i11;
+import 'junction/device_token.dart' as _i8;
+import 'logs/notifications_logs.dart' as _i9;
+import 'message/notificacion_push.dart' as _i10;
+import 'module_class.dart' as _i11;
+import 'tokens/token_device.dart' as _i12;
 export 'devices/devices.dart';
 export 'enums/devices_type.dart';
 export 'enums/notification_status.dart';
 export 'enums/notify_environment.dart';
 export 'exceptions/notify_pod_exception.dart';
+export 'junction/device_token.dart';
 export 'logs/notifications_logs.dart';
 export 'message/notificacion_push.dart';
 export 'module_class.dart';
@@ -70,6 +72,12 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'protocol:DevicesType',
         ),
         _i2.ColumnDefinition(
+          name: 'deviceId',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
           name: 'createdAt',
           columnType: _i2.ColumnType.timestampWithoutTimeZone,
           isNullable: false,
@@ -101,6 +109,89 @@ class Protocol extends _i1.SerializationManagerServer {
       managed: true,
     ),
     _i2.TableDefinition(
+      name: 'serverpod_device_token_register',
+      dartName: 'Register',
+      schema: 'public',
+      module: 'notify_pod',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault:
+              'nextval(\'serverpod_device_token_register_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'deviceId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'tokenId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'serverpod_device_token_register_fk_0',
+          columns: ['deviceId'],
+          referenceTable: 'serverpod_devices_notify_pod',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'serverpod_device_token_register_fk_1',
+          columns: ['tokenId'],
+          referenceTable: 'serverpod_device_token',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'serverpod_device_token_register_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        ),
+        _i2.IndexDefinition(
+          indexName: 'devices_token_index',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'deviceId',
+            ),
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'tokenId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
       name: 'serverpod_devices_notify_pod',
       dartName: 'Device',
       schema: 'public',
@@ -116,6 +207,12 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'userId',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'deviceId',
           columnType: _i2.ColumnType.text,
           isNullable: false,
           dartType: 'String',
@@ -309,6 +406,18 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'String',
         ),
         _i2.ColumnDefinition(
+          name: 'title',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'deviceId',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
           name: 'message',
           columnType: _i2.ColumnType.text,
           isNullable: false,
@@ -329,8 +438,8 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'readAt',
           columnType: _i2.ColumnType.timestampWithoutTimeZone,
-          isNullable: false,
-          dartType: 'DateTime',
+          isNullable: true,
+          dartType: 'DateTime?',
         ),
         _i2.ColumnDefinition(
           name: 'createdAt',
@@ -412,17 +521,20 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i7.NotifyPodException) {
       return _i7.NotifyPodException.fromJson(data) as T;
     }
-    if (t == _i8.NotificationsLogs) {
-      return _i8.NotificationsLogs.fromJson(data) as T;
+    if (t == _i8.Register) {
+      return _i8.Register.fromJson(data) as T;
     }
-    if (t == _i9.NotificacionPush) {
-      return _i9.NotificacionPush.fromJson(data) as T;
+    if (t == _i9.NotificationsLogs) {
+      return _i9.NotificationsLogs.fromJson(data) as T;
     }
-    if (t == _i10.ModuleClass) {
-      return _i10.ModuleClass.fromJson(data) as T;
+    if (t == _i10.NotificacionPush) {
+      return _i10.NotificacionPush.fromJson(data) as T;
     }
-    if (t == _i11.DeviceToken) {
-      return _i11.DeviceToken.fromJson(data) as T;
+    if (t == _i11.ModuleClass) {
+      return _i11.ModuleClass.fromJson(data) as T;
+    }
+    if (t == _i12.DeviceToken) {
+      return _i12.DeviceToken.fromJson(data) as T;
     }
     if (t == _i1.getType<_i3.Device?>()) {
       return (data != null ? _i3.Device.fromJson(data) : null) as T;
@@ -439,23 +551,36 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i7.NotifyPodException?>()) {
       return (data != null ? _i7.NotifyPodException.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i8.NotificationsLogs?>()) {
-      return (data != null ? _i8.NotificationsLogs.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i8.Register?>()) {
+      return (data != null ? _i8.Register.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i9.NotificacionPush?>()) {
-      return (data != null ? _i9.NotificacionPush.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i9.NotificationsLogs?>()) {
+      return (data != null ? _i9.NotificationsLogs.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i10.ModuleClass?>()) {
-      return (data != null ? _i10.ModuleClass.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i10.NotificacionPush?>()) {
+      return (data != null ? _i10.NotificacionPush.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i11.DeviceToken?>()) {
-      return (data != null ? _i11.DeviceToken.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i11.ModuleClass?>()) {
+      return (data != null ? _i11.ModuleClass.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<List<_i8.NotificationsLogs>?>()) {
+    if (t == _i1.getType<_i12.DeviceToken?>()) {
+      return (data != null ? _i12.DeviceToken.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<List<_i9.NotificationsLogs>?>()) {
       return (data != null
           ? (data as List)
-              .map((e) => deserialize<_i8.NotificationsLogs>(e))
+              .map((e) => deserialize<_i9.NotificationsLogs>(e))
               .toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i8.Register>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i8.Register>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i8.Register>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i8.Register>(e)).toList()
           : null) as dynamic;
     }
     try {
@@ -483,16 +608,19 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i7.NotifyPodException) {
       return 'NotifyPodException';
     }
-    if (data is _i8.NotificationsLogs) {
+    if (data is _i8.Register) {
+      return 'Register';
+    }
+    if (data is _i9.NotificationsLogs) {
       return 'NotificationsLogs';
     }
-    if (data is _i9.NotificacionPush) {
+    if (data is _i10.NotificacionPush) {
       return 'NotificacionPush';
     }
-    if (data is _i10.ModuleClass) {
+    if (data is _i11.ModuleClass) {
       return 'ModuleClass';
     }
-    if (data is _i11.DeviceToken) {
+    if (data is _i12.DeviceToken) {
       return 'DeviceToken';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -523,17 +651,20 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'NotifyPodException') {
       return deserialize<_i7.NotifyPodException>(data['data']);
     }
+    if (dataClassName == 'Register') {
+      return deserialize<_i8.Register>(data['data']);
+    }
     if (dataClassName == 'NotificationsLogs') {
-      return deserialize<_i8.NotificationsLogs>(data['data']);
+      return deserialize<_i9.NotificationsLogs>(data['data']);
     }
     if (dataClassName == 'NotificacionPush') {
-      return deserialize<_i9.NotificacionPush>(data['data']);
+      return deserialize<_i10.NotificacionPush>(data['data']);
     }
     if (dataClassName == 'ModuleClass') {
-      return deserialize<_i10.ModuleClass>(data['data']);
+      return deserialize<_i11.ModuleClass>(data['data']);
     }
     if (dataClassName == 'DeviceToken') {
-      return deserialize<_i11.DeviceToken>(data['data']);
+      return deserialize<_i12.DeviceToken>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
@@ -553,12 +684,14 @@ class Protocol extends _i1.SerializationManagerServer {
     switch (t) {
       case _i3.Device:
         return _i3.Device.t;
-      case _i8.NotificationsLogs:
-        return _i8.NotificationsLogs.t;
-      case _i9.NotificacionPush:
-        return _i9.NotificacionPush.t;
-      case _i11.DeviceToken:
-        return _i11.DeviceToken.t;
+      case _i8.Register:
+        return _i8.Register.t;
+      case _i9.NotificationsLogs:
+        return _i9.NotificationsLogs.t;
+      case _i10.NotificacionPush:
+        return _i10.NotificacionPush.t;
+      case _i12.DeviceToken:
+        return _i12.DeviceToken.t;
     }
     return null;
   }
