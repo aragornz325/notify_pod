@@ -7,4 +7,4 @@ fields:
     deviceId: String
     createdAt: DateTime
     updatedAt: DateTime
-    register: List<Register>?, relation(name=deviceToken_register)
+    register: List<RegisterDeviceToken>?, relation(name=deviceToken_register)

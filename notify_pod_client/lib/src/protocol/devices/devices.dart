@@ -18,8 +18,7 @@ abstract class Device implements _i1.SerializableModel {
   Device._({
     this.id,
     required this.userId,
-    required this.deviceId,
-    required this.token,
+    required this.idDevice,
     required this.type,
     this.notificationsLogs,
     required this.createdAt,
@@ -30,30 +29,31 @@ abstract class Device implements _i1.SerializableModel {
   factory Device({
     int? id,
     required String userId,
-    required String deviceId,
-    required String token,
+    required String idDevice,
     required _i2.DevicesType type,
     List<_i3.NotificationsLogs>? notificationsLogs,
-    required String createdAt,
-    required String updatedAt,
-    List<_i4.Register>? register,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    List<_i4.RegisterDeviceToken>? register,
   }) = _DeviceImpl;
 
   factory Device.fromJson(Map<String, dynamic> jsonSerialization) {
     return Device(
       id: jsonSerialization['id'] as int?,
       userId: jsonSerialization['userId'] as String,
-      deviceId: jsonSerialization['deviceId'] as String,
-      token: jsonSerialization['token'] as String,
+      idDevice: jsonSerialization['idDevice'] as String,
       type: _i2.DevicesType.fromJson((jsonSerialization['type'] as int)),
       notificationsLogs: (jsonSerialization['notificationsLogs'] as List?)
           ?.map((e) =>
               _i3.NotificationsLogs.fromJson((e as Map<String, dynamic>)))
           .toList(),
-      createdAt: jsonSerialization['createdAt'] as String,
-      updatedAt: jsonSerialization['updatedAt'] as String,
+      createdAt:
+          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
+      updatedAt:
+          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
       register: (jsonSerialization['register'] as List?)
-          ?.map((e) => _i4.Register.fromJson((e as Map<String, dynamic>)))
+          ?.map((e) =>
+              _i4.RegisterDeviceToken.fromJson((e as Map<String, dynamic>)))
           .toList(),
     );
   }
@@ -65,44 +65,40 @@ abstract class Device implements _i1.SerializableModel {
 
   String userId;
 
-  String deviceId;
-
-  String token;
+  String idDevice;
 
   _i2.DevicesType type;
 
   List<_i3.NotificationsLogs>? notificationsLogs;
 
-  String createdAt;
+  DateTime createdAt;
 
-  String updatedAt;
+  DateTime updatedAt;
 
-  List<_i4.Register>? register;
+  List<_i4.RegisterDeviceToken>? register;
 
   Device copyWith({
     int? id,
     String? userId,
-    String? deviceId,
-    String? token,
+    String? idDevice,
     _i2.DevicesType? type,
     List<_i3.NotificationsLogs>? notificationsLogs,
-    String? createdAt,
-    String? updatedAt,
-    List<_i4.Register>? register,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    List<_i4.RegisterDeviceToken>? register,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
       'userId': userId,
-      'deviceId': deviceId,
-      'token': token,
+      'idDevice': idDevice,
       'type': type.toJson(),
       if (notificationsLogs != null)
         'notificationsLogs':
             notificationsLogs?.toJson(valueToJson: (v) => v.toJson()),
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
+      'createdAt': createdAt.toJson(),
+      'updatedAt': updatedAt.toJson(),
       if (register != null)
         'register': register?.toJson(valueToJson: (v) => v.toJson()),
     };
@@ -120,18 +116,16 @@ class _DeviceImpl extends Device {
   _DeviceImpl({
     int? id,
     required String userId,
-    required String deviceId,
-    required String token,
+    required String idDevice,
     required _i2.DevicesType type,
     List<_i3.NotificationsLogs>? notificationsLogs,
-    required String createdAt,
-    required String updatedAt,
-    List<_i4.Register>? register,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    List<_i4.RegisterDeviceToken>? register,
   }) : super._(
           id: id,
           userId: userId,
-          deviceId: deviceId,
-          token: token,
+          idDevice: idDevice,
           type: type,
           notificationsLogs: notificationsLogs,
           createdAt: createdAt,
@@ -143,26 +137,24 @@ class _DeviceImpl extends Device {
   Device copyWith({
     Object? id = _Undefined,
     String? userId,
-    String? deviceId,
-    String? token,
+    String? idDevice,
     _i2.DevicesType? type,
     Object? notificationsLogs = _Undefined,
-    String? createdAt,
-    String? updatedAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
     Object? register = _Undefined,
   }) {
     return Device(
       id: id is int? ? id : this.id,
       userId: userId ?? this.userId,
-      deviceId: deviceId ?? this.deviceId,
-      token: token ?? this.token,
+      idDevice: idDevice ?? this.idDevice,
       type: type ?? this.type,
       notificationsLogs: notificationsLogs is List<_i3.NotificationsLogs>?
           ? notificationsLogs
           : this.notificationsLogs?.map((e0) => e0.copyWith()).toList(),
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      register: register is List<_i4.Register>?
+      register: register is List<_i4.RegisterDeviceToken>?
           ? register
           : this.register?.map((e0) => e0.copyWith()).toList(),
     );

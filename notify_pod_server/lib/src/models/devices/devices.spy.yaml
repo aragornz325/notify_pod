@@ -2,13 +2,12 @@ class: Device
 table: serverpod_devices_notify_pod
 fields:
     userId: String
-    deviceId: String
-    token: String
+    idDevice: String
     type: DevicesType
     notificationsLogs: List<NotificationsLogs>?, relation(name=device_logs)
-    createdAt: String
-    updatedAt: String
-    register: List<Register>?, relation(name=device_register)
+    createdAt: DateTime
+    updatedAt: DateTime
+    register: List<RegisterDeviceToken>?, relation(name=device_register)
 indexes:
     idx_devices_userId:
         fields: userId

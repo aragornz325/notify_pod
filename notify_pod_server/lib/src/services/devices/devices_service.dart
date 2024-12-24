@@ -20,6 +20,18 @@ class DevicesService extends Service {
       updatedAt: now,
     );
 
+    final device = await performOperation<Device>(
+      operationName: 'verificar dispositivo',
+      operation: () async {
+        return await registerDevice(
+          session,
+          userId: userId,
+          deviceId: deviceId,
+          devicesType: devicesType,
+        );
+      },
+    );
+
     final checkToken = await getDeviceToken(
       session,
       tokenFCM: tokenFCM,
@@ -33,6 +45,8 @@ class DevicesService extends Service {
             [
               deviceToken.copyWith(
                 id: checkToken.id,
+                deviceId: device.idDevice,
+                updatedAt: now,
               ),
             ],
           ).onError((
@@ -49,12 +63,16 @@ class DevicesService extends Service {
         },
       );
     } else {
-      return await performOperation(
+      final deviceTokenCreado = await performOperation<DeviceToken>(
         operationName: 'registerFCMToken',
         operation: () async {
-          await DeviceToken.db.insert(
+          final deviceTokenEnDb = await DeviceToken.db.insert(
             session,
-            [deviceToken],
+            [
+              deviceToken.copyWith(
+                deviceId: device.idDevice,
+              ),
+            ],
           ).onError((
             error,
             stackTrace,
@@ -65,10 +83,39 @@ class DevicesService extends Service {
               stackTrace: stackTrace.toString(),
             );
           });
-          return true;
+          return deviceTokenEnDb.first;
         },
       );
+
+    await performOperation(
+      operationName: 'register in Junction table',
+      operation: () async {
+        await RegisterDeviceToken.db.insert(
+          session,
+          [
+            RegisterDeviceToken(
+              deviceId: device.id!,
+              tokenId: deviceTokenCreado.id!,
+              
+            ),
+          ],
+        ).onError((
+          error,
+          stackTrace,
+        ) {
+          throw NotifyPodException(
+            title: 'Failed to register in junction table',
+            error: error.toString(),
+            stackTrace: stackTrace.toString(),
+          );
+        });
+      },
+    );
+    
     }
+
+  return true;
+
   }
 
   Future<DeviceToken?> getDeviceToken(
@@ -127,12 +174,77 @@ class DevicesService extends Service {
     );
   }
 
-  // Future<bool> registerDevice(
-  //   Session session, {
-  //   required String userId,
-  //   required String deviceId,
-  //   required DevicesType devicesType,
-  // }) async {
-    
+  /// register a new device
+  /// if the device already exists, it will return the id of the device
+  /// if the device does not exist, it will return the id of the new device
+  /// [userId] the user id
+  /// [deviceId] the device id obtained from the device
+  /// [devicesType] the type of device
+  /// **note** use the enum [DevicesType]
+  ///
+  Future<Device> registerDevice(
+    Session session, {
+    required String userId,
+    required String deviceId,
+    required DevicesType devicesType,
+  }) async {
+    final now = DateTime.now().toUtc();
+    final verificarDispositivo = await performOperation(
+      operationName: 'verificar dispositivo',
+      operation: () async {
+        final device = await Device.db
+            .find(
+          session,
+          where: (t) =>
+              t.userId.equals(
+                userId,
+              ) &
+              t.idDevice.equals(
+                deviceId,
+              ),
+        )
+            .onError((
+          error,
+          stackTrace,
+        ) {
+          throw NotifyPodException(
+            title: 'Failed to get device token for user $userId',
+            error: error.toString(),
+            stackTrace: stackTrace.toString(),
+          );
+        });
 
+        return device.isNotEmpty ? device.first : null;
+      },
+    );
+    if (verificarDispositivo != null) {
+      return verificarDispositivo;
+    }
+    final device = Device(
+      userId: userId,
+      idDevice: deviceId,
+      type: devicesType,
+      createdAt: now,
+      updatedAt: now,
+    );
+    return await performOperation<Device>(
+      operationName: 'registrar device',
+      operation: () async {
+        final nuevoDispositivo = await Device.db.insert(
+          session,
+          [device],
+        ).onError((
+          error,
+          stackTrace,
+        ) {
+          throw NotifyPodException(
+            title: 'Failed to register device',
+            error: error.toString(),
+            stackTrace: stackTrace.toString(),
+          );
+        });
+        return nuevoDispositivo.first;
+      },
+    );
+  }
 }

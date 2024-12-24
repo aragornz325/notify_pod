@@ -110,7 +110,7 @@ class Protocol extends _i1.SerializationManagerServer {
     ),
     _i2.TableDefinition(
       name: 'serverpod_device_token_register',
-      dartName: 'Register',
+      dartName: 'RegisterDeviceToken',
       schema: 'public',
       module: 'notify_pod',
       columns: [
@@ -212,13 +212,7 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'String',
         ),
         _i2.ColumnDefinition(
-          name: 'deviceId',
-          columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
-        ),
-        _i2.ColumnDefinition(
-          name: 'token',
+          name: 'idDevice',
           columnType: _i2.ColumnType.text,
           isNullable: false,
           dartType: 'String',
@@ -231,15 +225,15 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'createdAt',
-          columnType: _i2.ColumnType.text,
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
           isNullable: false,
-          dartType: 'String',
+          dartType: 'DateTime',
         ),
         _i2.ColumnDefinition(
           name: 'updatedAt',
-          columnType: _i2.ColumnType.text,
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
           isNullable: false,
-          dartType: 'String',
+          dartType: 'DateTime',
         ),
       ],
       foreignKeys: [],
@@ -521,8 +515,8 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i7.NotifyPodException) {
       return _i7.NotifyPodException.fromJson(data) as T;
     }
-    if (t == _i8.Register) {
-      return _i8.Register.fromJson(data) as T;
+    if (t == _i8.RegisterDeviceToken) {
+      return _i8.RegisterDeviceToken.fromJson(data) as T;
     }
     if (t == _i9.NotificationsLogs) {
       return _i9.NotificationsLogs.fromJson(data) as T;
@@ -551,8 +545,9 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i7.NotifyPodException?>()) {
       return (data != null ? _i7.NotifyPodException.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i8.Register?>()) {
-      return (data != null ? _i8.Register.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i8.RegisterDeviceToken?>()) {
+      return (data != null ? _i8.RegisterDeviceToken.fromJson(data) : null)
+          as T;
     }
     if (t == _i1.getType<_i9.NotificationsLogs?>()) {
       return (data != null ? _i9.NotificationsLogs.fromJson(data) : null) as T;
@@ -573,14 +568,18 @@ class Protocol extends _i1.SerializationManagerServer {
               .toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i8.Register>?>()) {
+    if (t == _i1.getType<List<_i8.RegisterDeviceToken>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i8.Register>(e)).toList()
+          ? (data as List)
+              .map((e) => deserialize<_i8.RegisterDeviceToken>(e))
+              .toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i8.Register>?>()) {
+    if (t == _i1.getType<List<_i8.RegisterDeviceToken>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i8.Register>(e)).toList()
+          ? (data as List)
+              .map((e) => deserialize<_i8.RegisterDeviceToken>(e))
+              .toList()
           : null) as dynamic;
     }
     try {
@@ -608,8 +607,8 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i7.NotifyPodException) {
       return 'NotifyPodException';
     }
-    if (data is _i8.Register) {
-      return 'Register';
+    if (data is _i8.RegisterDeviceToken) {
+      return 'RegisterDeviceToken';
     }
     if (data is _i9.NotificationsLogs) {
       return 'NotificationsLogs';
@@ -651,8 +650,8 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'NotifyPodException') {
       return deserialize<_i7.NotifyPodException>(data['data']);
     }
-    if (dataClassName == 'Register') {
-      return deserialize<_i8.Register>(data['data']);
+    if (dataClassName == 'RegisterDeviceToken') {
+      return deserialize<_i8.RegisterDeviceToken>(data['data']);
     }
     if (dataClassName == 'NotificationsLogs') {
       return deserialize<_i9.NotificationsLogs>(data['data']);
@@ -684,8 +683,8 @@ class Protocol extends _i1.SerializationManagerServer {
     switch (t) {
       case _i3.Device:
         return _i3.Device.t;
-      case _i8.Register:
-        return _i8.Register.t;
+      case _i8.RegisterDeviceToken:
+        return _i8.RegisterDeviceToken.t;
       case _i9.NotificationsLogs:
         return _i9.NotificationsLogs.t;
       case _i10.NotificacionPush:

@@ -13,8 +13,9 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import '../devices/devices.dart' as _i2;
 import '../tokens/token_device.dart' as _i3;
 
-abstract class Register implements _i1.TableRow, _i1.ProtocolSerialization {
-  Register._({
+abstract class RegisterDeviceToken
+    implements _i1.TableRow, _i1.ProtocolSerialization {
+  RegisterDeviceToken._({
     this.id,
     required this.deviceId,
     this.device,
@@ -22,16 +23,16 @@ abstract class Register implements _i1.TableRow, _i1.ProtocolSerialization {
     this.token,
   });
 
-  factory Register({
+  factory RegisterDeviceToken({
     int? id,
     required int deviceId,
     _i2.Device? device,
     required int tokenId,
     _i3.DeviceToken? token,
-  }) = _RegisterImpl;
+  }) = _RegisterDeviceTokenImpl;
 
-  factory Register.fromJson(Map<String, dynamic> jsonSerialization) {
-    return Register(
+  factory RegisterDeviceToken.fromJson(Map<String, dynamic> jsonSerialization) {
+    return RegisterDeviceToken(
       id: jsonSerialization['id'] as int?,
       deviceId: jsonSerialization['deviceId'] as int,
       device: jsonSerialization['device'] == null
@@ -46,9 +47,9 @@ abstract class Register implements _i1.TableRow, _i1.ProtocolSerialization {
     );
   }
 
-  static final t = RegisterTable();
+  static final t = RegisterDeviceTokenTable();
 
-  static const db = RegisterRepository._();
+  static const db = RegisterDeviceTokenRepository._();
 
   @override
   int? id;
@@ -64,7 +65,7 @@ abstract class Register implements _i1.TableRow, _i1.ProtocolSerialization {
   @override
   _i1.Table get table => t;
 
-  Register copyWith({
+  RegisterDeviceToken copyWith({
     int? id,
     int? deviceId,
     _i2.Device? device,
@@ -93,32 +94,32 @@ abstract class Register implements _i1.TableRow, _i1.ProtocolSerialization {
     };
   }
 
-  static RegisterInclude include({
+  static RegisterDeviceTokenInclude include({
     _i2.DeviceInclude? device,
     _i3.DeviceTokenInclude? token,
   }) {
-    return RegisterInclude._(
+    return RegisterDeviceTokenInclude._(
       device: device,
       token: token,
     );
   }
 
-  static RegisterIncludeList includeList({
-    _i1.WhereExpressionBuilder<RegisterTable>? where,
+  static RegisterDeviceTokenIncludeList includeList({
+    _i1.WhereExpressionBuilder<RegisterDeviceTokenTable>? where,
     int? limit,
     int? offset,
-    _i1.OrderByBuilder<RegisterTable>? orderBy,
+    _i1.OrderByBuilder<RegisterDeviceTokenTable>? orderBy,
     bool orderDescending = false,
-    _i1.OrderByListBuilder<RegisterTable>? orderByList,
-    RegisterInclude? include,
+    _i1.OrderByListBuilder<RegisterDeviceTokenTable>? orderByList,
+    RegisterDeviceTokenInclude? include,
   }) {
-    return RegisterIncludeList._(
+    return RegisterDeviceTokenIncludeList._(
       where: where,
       limit: limit,
       offset: offset,
-      orderBy: orderBy?.call(Register.t),
+      orderBy: orderBy?.call(RegisterDeviceToken.t),
       orderDescending: orderDescending,
-      orderByList: orderByList?.call(Register.t),
+      orderByList: orderByList?.call(RegisterDeviceToken.t),
       include: include,
     );
   }
@@ -131,8 +132,8 @@ abstract class Register implements _i1.TableRow, _i1.ProtocolSerialization {
 
 class _Undefined {}
 
-class _RegisterImpl extends Register {
-  _RegisterImpl({
+class _RegisterDeviceTokenImpl extends RegisterDeviceToken {
+  _RegisterDeviceTokenImpl({
     int? id,
     required int deviceId,
     _i2.Device? device,
@@ -147,14 +148,14 @@ class _RegisterImpl extends Register {
         );
 
   @override
-  Register copyWith({
+  RegisterDeviceToken copyWith({
     Object? id = _Undefined,
     int? deviceId,
     Object? device = _Undefined,
     int? tokenId,
     Object? token = _Undefined,
   }) {
-    return Register(
+    return RegisterDeviceToken(
       id: id is int? ? id : this.id,
       deviceId: deviceId ?? this.deviceId,
       device: device is _i2.Device? ? device : this.device?.copyWith(),
@@ -164,8 +165,8 @@ class _RegisterImpl extends Register {
   }
 }
 
-class RegisterTable extends _i1.Table {
-  RegisterTable({super.tableRelation})
+class RegisterDeviceTokenTable extends _i1.Table {
+  RegisterDeviceTokenTable({super.tableRelation})
       : super(tableName: 'serverpod_device_token_register') {
     deviceId = _i1.ColumnInt(
       'deviceId',
@@ -189,7 +190,7 @@ class RegisterTable extends _i1.Table {
     if (_device != null) return _device!;
     _device = _i1.createRelationTable(
       relationFieldName: 'device',
-      field: Register.t.deviceId,
+      field: RegisterDeviceToken.t.deviceId,
       foreignField: _i2.Device.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
@@ -202,7 +203,7 @@ class RegisterTable extends _i1.Table {
     if (_token != null) return _token!;
     _token = _i1.createRelationTable(
       relationFieldName: 'token',
-      field: Register.t.tokenId,
+      field: RegisterDeviceToken.t.tokenId,
       foreignField: _i3.DeviceToken.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
@@ -230,8 +231,8 @@ class RegisterTable extends _i1.Table {
   }
 }
 
-class RegisterInclude extends _i1.IncludeObject {
-  RegisterInclude._({
+class RegisterDeviceTokenInclude extends _i1.IncludeObject {
+  RegisterDeviceTokenInclude._({
     _i2.DeviceInclude? device,
     _i3.DeviceTokenInclude? token,
   }) {
@@ -250,12 +251,12 @@ class RegisterInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table get table => Register.t;
+  _i1.Table get table => RegisterDeviceToken.t;
 }
 
-class RegisterIncludeList extends _i1.IncludeList {
-  RegisterIncludeList._({
-    _i1.WhereExpressionBuilder<RegisterTable>? where,
+class RegisterDeviceTokenIncludeList extends _i1.IncludeList {
+  RegisterDeviceTokenIncludeList._({
+    _i1.WhereExpressionBuilder<RegisterDeviceTokenTable>? where,
     super.limit,
     super.offset,
     super.orderBy,
@@ -263,36 +264,36 @@ class RegisterIncludeList extends _i1.IncludeList {
     super.orderByList,
     super.include,
   }) {
-    super.where = where?.call(Register.t);
+    super.where = where?.call(RegisterDeviceToken.t);
   }
 
   @override
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table get table => Register.t;
+  _i1.Table get table => RegisterDeviceToken.t;
 }
 
-class RegisterRepository {
-  const RegisterRepository._();
+class RegisterDeviceTokenRepository {
+  const RegisterDeviceTokenRepository._();
 
-  final attachRow = const RegisterAttachRowRepository._();
+  final attachRow = const RegisterDeviceTokenAttachRowRepository._();
 
-  Future<List<Register>> find(
+  Future<List<RegisterDeviceToken>> find(
     _i1.Session session, {
-    _i1.WhereExpressionBuilder<RegisterTable>? where,
+    _i1.WhereExpressionBuilder<RegisterDeviceTokenTable>? where,
     int? limit,
     int? offset,
-    _i1.OrderByBuilder<RegisterTable>? orderBy,
+    _i1.OrderByBuilder<RegisterDeviceTokenTable>? orderBy,
     bool orderDescending = false,
-    _i1.OrderByListBuilder<RegisterTable>? orderByList,
+    _i1.OrderByListBuilder<RegisterDeviceTokenTable>? orderByList,
     _i1.Transaction? transaction,
-    RegisterInclude? include,
+    RegisterDeviceTokenInclude? include,
   }) async {
-    return session.db.find<Register>(
-      where: where?.call(Register.t),
-      orderBy: orderBy?.call(Register.t),
-      orderByList: orderByList?.call(Register.t),
+    return session.db.find<RegisterDeviceToken>(
+      where: where?.call(RegisterDeviceToken.t),
+      orderBy: orderBy?.call(RegisterDeviceToken.t),
+      orderByList: orderByList?.call(RegisterDeviceToken.t),
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
@@ -301,20 +302,20 @@ class RegisterRepository {
     );
   }
 
-  Future<Register?> findFirstRow(
+  Future<RegisterDeviceToken?> findFirstRow(
     _i1.Session session, {
-    _i1.WhereExpressionBuilder<RegisterTable>? where,
+    _i1.WhereExpressionBuilder<RegisterDeviceTokenTable>? where,
     int? offset,
-    _i1.OrderByBuilder<RegisterTable>? orderBy,
+    _i1.OrderByBuilder<RegisterDeviceTokenTable>? orderBy,
     bool orderDescending = false,
-    _i1.OrderByListBuilder<RegisterTable>? orderByList,
+    _i1.OrderByListBuilder<RegisterDeviceTokenTable>? orderByList,
     _i1.Transaction? transaction,
-    RegisterInclude? include,
+    RegisterDeviceTokenInclude? include,
   }) async {
-    return session.db.findFirstRow<Register>(
-      where: where?.call(Register.t),
-      orderBy: orderBy?.call(Register.t),
-      orderByList: orderByList?.call(Register.t),
+    return session.db.findFirstRow<RegisterDeviceToken>(
+      where: where?.call(RegisterDeviceToken.t),
+      orderBy: orderBy?.call(RegisterDeviceToken.t),
+      orderByList: orderByList?.call(RegisterDeviceToken.t),
       orderDescending: orderDescending,
       offset: offset,
       transaction: transaction,
@@ -322,155 +323,156 @@ class RegisterRepository {
     );
   }
 
-  Future<Register?> findById(
+  Future<RegisterDeviceToken?> findById(
     _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
-    RegisterInclude? include,
+    RegisterDeviceTokenInclude? include,
   }) async {
-    return session.db.findById<Register>(
+    return session.db.findById<RegisterDeviceToken>(
       id,
       transaction: transaction,
       include: include,
     );
   }
 
-  Future<List<Register>> insert(
+  Future<List<RegisterDeviceToken>> insert(
     _i1.Session session,
-    List<Register> rows, {
+    List<RegisterDeviceToken> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.insert<Register>(
+    return session.db.insert<RegisterDeviceToken>(
       rows,
       transaction: transaction,
     );
   }
 
-  Future<Register> insertRow(
+  Future<RegisterDeviceToken> insertRow(
     _i1.Session session,
-    Register row, {
+    RegisterDeviceToken row, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.insertRow<Register>(
+    return session.db.insertRow<RegisterDeviceToken>(
       row,
       transaction: transaction,
     );
   }
 
-  Future<List<Register>> update(
+  Future<List<RegisterDeviceToken>> update(
     _i1.Session session,
-    List<Register> rows, {
-    _i1.ColumnSelections<RegisterTable>? columns,
+    List<RegisterDeviceToken> rows, {
+    _i1.ColumnSelections<RegisterDeviceTokenTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.update<Register>(
+    return session.db.update<RegisterDeviceToken>(
       rows,
-      columns: columns?.call(Register.t),
+      columns: columns?.call(RegisterDeviceToken.t),
       transaction: transaction,
     );
   }
 
-  Future<Register> updateRow(
+  Future<RegisterDeviceToken> updateRow(
     _i1.Session session,
-    Register row, {
-    _i1.ColumnSelections<RegisterTable>? columns,
+    RegisterDeviceToken row, {
+    _i1.ColumnSelections<RegisterDeviceTokenTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.updateRow<Register>(
+    return session.db.updateRow<RegisterDeviceToken>(
       row,
-      columns: columns?.call(Register.t),
+      columns: columns?.call(RegisterDeviceToken.t),
       transaction: transaction,
     );
   }
 
-  Future<List<Register>> delete(
+  Future<List<RegisterDeviceToken>> delete(
     _i1.Session session,
-    List<Register> rows, {
+    List<RegisterDeviceToken> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.delete<Register>(
+    return session.db.delete<RegisterDeviceToken>(
       rows,
       transaction: transaction,
     );
   }
 
-  Future<Register> deleteRow(
+  Future<RegisterDeviceToken> deleteRow(
     _i1.Session session,
-    Register row, {
+    RegisterDeviceToken row, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.deleteRow<Register>(
+    return session.db.deleteRow<RegisterDeviceToken>(
       row,
       transaction: transaction,
     );
   }
 
-  Future<List<Register>> deleteWhere(
+  Future<List<RegisterDeviceToken>> deleteWhere(
     _i1.Session session, {
-    required _i1.WhereExpressionBuilder<RegisterTable> where,
+    required _i1.WhereExpressionBuilder<RegisterDeviceTokenTable> where,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.deleteWhere<Register>(
-      where: where(Register.t),
+    return session.db.deleteWhere<RegisterDeviceToken>(
+      where: where(RegisterDeviceToken.t),
       transaction: transaction,
     );
   }
 
   Future<int> count(
     _i1.Session session, {
-    _i1.WhereExpressionBuilder<RegisterTable>? where,
+    _i1.WhereExpressionBuilder<RegisterDeviceTokenTable>? where,
     int? limit,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.count<Register>(
-      where: where?.call(Register.t),
+    return session.db.count<RegisterDeviceToken>(
+      where: where?.call(RegisterDeviceToken.t),
       limit: limit,
       transaction: transaction,
     );
   }
 }
 
-class RegisterAttachRowRepository {
-  const RegisterAttachRowRepository._();
+class RegisterDeviceTokenAttachRowRepository {
+  const RegisterDeviceTokenAttachRowRepository._();
 
   Future<void> device(
     _i1.Session session,
-    Register register,
+    RegisterDeviceToken registerDeviceToken,
     _i2.Device device, {
     _i1.Transaction? transaction,
   }) async {
-    if (register.id == null) {
-      throw ArgumentError.notNull('register.id');
+    if (registerDeviceToken.id == null) {
+      throw ArgumentError.notNull('registerDeviceToken.id');
     }
     if (device.id == null) {
       throw ArgumentError.notNull('device.id');
     }
 
-    var $register = register.copyWith(deviceId: device.id);
-    await session.db.updateRow<Register>(
-      $register,
-      columns: [Register.t.deviceId],
+    var $registerDeviceToken =
+        registerDeviceToken.copyWith(deviceId: device.id);
+    await session.db.updateRow<RegisterDeviceToken>(
+      $registerDeviceToken,
+      columns: [RegisterDeviceToken.t.deviceId],
       transaction: transaction,
     );
   }
 
   Future<void> token(
     _i1.Session session,
-    Register register,
+    RegisterDeviceToken registerDeviceToken,
     _i3.DeviceToken token, {
     _i1.Transaction? transaction,
   }) async {
-    if (register.id == null) {
-      throw ArgumentError.notNull('register.id');
+    if (registerDeviceToken.id == null) {
+      throw ArgumentError.notNull('registerDeviceToken.id');
     }
     if (token.id == null) {
       throw ArgumentError.notNull('token.id');
     }
 
-    var $register = register.copyWith(tokenId: token.id);
-    await session.db.updateRow<Register>(
-      $register,
-      columns: [Register.t.tokenId],
+    var $registerDeviceToken = registerDeviceToken.copyWith(tokenId: token.id);
+    await session.db.updateRow<RegisterDeviceToken>(
+      $registerDeviceToken,
+      columns: [RegisterDeviceToken.t.tokenId],
       transaction: transaction,
     );
   }

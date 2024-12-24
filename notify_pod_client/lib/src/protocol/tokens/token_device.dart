@@ -33,7 +33,7 @@ abstract class DeviceToken implements _i1.SerializableModel {
     required String deviceId,
     required DateTime createdAt,
     required DateTime updatedAt,
-    List<_i3.Register>? register,
+    List<_i3.RegisterDeviceToken>? register,
   }) = _DeviceTokenImpl;
 
   factory DeviceToken.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -48,7 +48,8 @@ abstract class DeviceToken implements _i1.SerializableModel {
       updatedAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
       register: (jsonSerialization['register'] as List?)
-          ?.map((e) => _i3.Register.fromJson((e as Map<String, dynamic>)))
+          ?.map((e) =>
+              _i3.RegisterDeviceToken.fromJson((e as Map<String, dynamic>)))
           .toList(),
     );
   }
@@ -70,7 +71,7 @@ abstract class DeviceToken implements _i1.SerializableModel {
 
   DateTime updatedAt;
 
-  List<_i3.Register>? register;
+  List<_i3.RegisterDeviceToken>? register;
 
   DeviceToken copyWith({
     int? id,
@@ -80,7 +81,7 @@ abstract class DeviceToken implements _i1.SerializableModel {
     String? deviceId,
     DateTime? createdAt,
     DateTime? updatedAt,
-    List<_i3.Register>? register,
+    List<_i3.RegisterDeviceToken>? register,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -114,7 +115,7 @@ class _DeviceTokenImpl extends DeviceToken {
     required String deviceId,
     required DateTime createdAt,
     required DateTime updatedAt,
-    List<_i3.Register>? register,
+    List<_i3.RegisterDeviceToken>? register,
   }) : super._(
           id: id,
           token: token,
@@ -145,7 +146,7 @@ class _DeviceTokenImpl extends DeviceToken {
       deviceId: deviceId ?? this.deviceId,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      register: register is List<_i3.Register>?
+      register: register is List<_i3.RegisterDeviceToken>?
           ? register
           : this.register?.map((e0) => e0.copyWith()).toList(),
     );

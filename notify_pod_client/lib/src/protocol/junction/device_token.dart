@@ -13,8 +13,8 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../devices/devices.dart' as _i2;
 import '../tokens/token_device.dart' as _i3;
 
-abstract class Register implements _i1.SerializableModel {
-  Register._({
+abstract class RegisterDeviceToken implements _i1.SerializableModel {
+  RegisterDeviceToken._({
     this.id,
     required this.deviceId,
     this.device,
@@ -22,16 +22,16 @@ abstract class Register implements _i1.SerializableModel {
     this.token,
   });
 
-  factory Register({
+  factory RegisterDeviceToken({
     int? id,
     required int deviceId,
     _i2.Device? device,
     required int tokenId,
     _i3.DeviceToken? token,
-  }) = _RegisterImpl;
+  }) = _RegisterDeviceTokenImpl;
 
-  factory Register.fromJson(Map<String, dynamic> jsonSerialization) {
-    return Register(
+  factory RegisterDeviceToken.fromJson(Map<String, dynamic> jsonSerialization) {
+    return RegisterDeviceToken(
       id: jsonSerialization['id'] as int?,
       deviceId: jsonSerialization['deviceId'] as int,
       device: jsonSerialization['device'] == null
@@ -59,7 +59,7 @@ abstract class Register implements _i1.SerializableModel {
 
   _i3.DeviceToken? token;
 
-  Register copyWith({
+  RegisterDeviceToken copyWith({
     int? id,
     int? deviceId,
     _i2.Device? device,
@@ -85,8 +85,8 @@ abstract class Register implements _i1.SerializableModel {
 
 class _Undefined {}
 
-class _RegisterImpl extends Register {
-  _RegisterImpl({
+class _RegisterDeviceTokenImpl extends RegisterDeviceToken {
+  _RegisterDeviceTokenImpl({
     int? id,
     required int deviceId,
     _i2.Device? device,
@@ -101,14 +101,14 @@ class _RegisterImpl extends Register {
         );
 
   @override
-  Register copyWith({
+  RegisterDeviceToken copyWith({
     Object? id = _Undefined,
     int? deviceId,
     Object? device = _Undefined,
     int? tokenId,
     Object? token = _Undefined,
   }) {
-    return Register(
+    return RegisterDeviceToken(
       id: id is int? ? id : this.id,
       deviceId: deviceId ?? this.deviceId,
       device: device is _i2.Device? ? device : this.device?.copyWith(),
