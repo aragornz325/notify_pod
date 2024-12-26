@@ -15,21 +15,21 @@ import 'enums/devices_type.dart' as _i3;
 import 'enums/notification_status.dart' as _i4;
 import 'enums/notify_environment.dart' as _i5;
 import 'exceptions/notify_pod_exception.dart' as _i6;
-import 'junction/device_token.dart' as _i7;
+import 'logs/notifications_by_topic_logs.dart' as _i7;
 import 'logs/notifications_logs.dart' as _i8;
 import 'message/notificacion_push.dart' as _i9;
-import 'module_class.dart' as _i10;
-import 'tokens/token_device.dart' as _i11;
+import 'message/notificacion_push_by_topic.dart' as _i10;
+import 'module_class.dart' as _i11;
 export 'devices/devices.dart';
 export 'enums/devices_type.dart';
 export 'enums/notification_status.dart';
 export 'enums/notify_environment.dart';
 export 'exceptions/notify_pod_exception.dart';
-export 'junction/device_token.dart';
+export 'logs/notifications_by_topic_logs.dart';
 export 'logs/notifications_logs.dart';
 export 'message/notificacion_push.dart';
+export 'message/notificacion_push_by_topic.dart';
 export 'module_class.dart';
-export 'tokens/token_device.dart';
 export 'client.dart';
 
 class Protocol extends _i1.SerializationManager {
@@ -60,8 +60,8 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i6.NotifyPodException) {
       return _i6.NotifyPodException.fromJson(data) as T;
     }
-    if (t == _i7.RegisterDeviceToken) {
-      return _i7.RegisterDeviceToken.fromJson(data) as T;
+    if (t == _i7.NotificationsByTopicLogs) {
+      return _i7.NotificationsByTopicLogs.fromJson(data) as T;
     }
     if (t == _i8.NotificationsLogs) {
       return _i8.NotificationsLogs.fromJson(data) as T;
@@ -69,11 +69,11 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i9.NotificacionPush) {
       return _i9.NotificacionPush.fromJson(data) as T;
     }
-    if (t == _i10.ModuleClass) {
-      return _i10.ModuleClass.fromJson(data) as T;
+    if (t == _i10.NotificacionPushByTopic) {
+      return _i10.NotificacionPushByTopic.fromJson(data) as T;
     }
-    if (t == _i11.DeviceToken) {
-      return _i11.DeviceToken.fromJson(data) as T;
+    if (t == _i11.ModuleClass) {
+      return _i11.ModuleClass.fromJson(data) as T;
     }
     if (t == _i1.getType<_i2.Device?>()) {
       return (data != null ? _i2.Device.fromJson(data) : null) as T;
@@ -90,8 +90,8 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i1.getType<_i6.NotifyPodException?>()) {
       return (data != null ? _i6.NotifyPodException.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i7.RegisterDeviceToken?>()) {
-      return (data != null ? _i7.RegisterDeviceToken.fromJson(data) : null)
+    if (t == _i1.getType<_i7.NotificationsByTopicLogs?>()) {
+      return (data != null ? _i7.NotificationsByTopicLogs.fromJson(data) : null)
           as T;
     }
     if (t == _i1.getType<_i8.NotificationsLogs?>()) {
@@ -100,30 +100,17 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i1.getType<_i9.NotificacionPush?>()) {
       return (data != null ? _i9.NotificacionPush.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i10.ModuleClass?>()) {
-      return (data != null ? _i10.ModuleClass.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i10.NotificacionPushByTopic?>()) {
+      return (data != null ? _i10.NotificacionPushByTopic.fromJson(data) : null)
+          as T;
     }
-    if (t == _i1.getType<_i11.DeviceToken?>()) {
-      return (data != null ? _i11.DeviceToken.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i11.ModuleClass?>()) {
+      return (data != null ? _i11.ModuleClass.fromJson(data) : null) as T;
     }
     if (t == _i1.getType<List<_i8.NotificationsLogs>?>()) {
       return (data != null
           ? (data as List)
               .map((e) => deserialize<_i8.NotificationsLogs>(e))
-              .toList()
-          : null) as dynamic;
-    }
-    if (t == _i1.getType<List<_i7.RegisterDeviceToken>?>()) {
-      return (data != null
-          ? (data as List)
-              .map((e) => deserialize<_i7.RegisterDeviceToken>(e))
-              .toList()
-          : null) as dynamic;
-    }
-    if (t == _i1.getType<List<_i7.RegisterDeviceToken>?>()) {
-      return (data != null
-          ? (data as List)
-              .map((e) => deserialize<_i7.RegisterDeviceToken>(e))
               .toList()
           : null) as dynamic;
     }
@@ -149,8 +136,8 @@ class Protocol extends _i1.SerializationManager {
     if (data is _i6.NotifyPodException) {
       return 'NotifyPodException';
     }
-    if (data is _i7.RegisterDeviceToken) {
-      return 'RegisterDeviceToken';
+    if (data is _i7.NotificationsByTopicLogs) {
+      return 'NotificationsByTopicLogs';
     }
     if (data is _i8.NotificationsLogs) {
       return 'NotificationsLogs';
@@ -158,11 +145,11 @@ class Protocol extends _i1.SerializationManager {
     if (data is _i9.NotificacionPush) {
       return 'NotificacionPush';
     }
-    if (data is _i10.ModuleClass) {
-      return 'ModuleClass';
+    if (data is _i10.NotificacionPushByTopic) {
+      return 'NotificacionPushByTopic';
     }
-    if (data is _i11.DeviceToken) {
-      return 'DeviceToken';
+    if (data is _i11.ModuleClass) {
+      return 'ModuleClass';
     }
     return null;
   }
@@ -188,8 +175,8 @@ class Protocol extends _i1.SerializationManager {
     if (dataClassName == 'NotifyPodException') {
       return deserialize<_i6.NotifyPodException>(data['data']);
     }
-    if (dataClassName == 'RegisterDeviceToken') {
-      return deserialize<_i7.RegisterDeviceToken>(data['data']);
+    if (dataClassName == 'NotificationsByTopicLogs') {
+      return deserialize<_i7.NotificationsByTopicLogs>(data['data']);
     }
     if (dataClassName == 'NotificationsLogs') {
       return deserialize<_i8.NotificationsLogs>(data['data']);
@@ -197,11 +184,11 @@ class Protocol extends _i1.SerializationManager {
     if (dataClassName == 'NotificacionPush') {
       return deserialize<_i9.NotificacionPush>(data['data']);
     }
-    if (dataClassName == 'ModuleClass') {
-      return deserialize<_i10.ModuleClass>(data['data']);
+    if (dataClassName == 'NotificacionPushByTopic') {
+      return deserialize<_i10.NotificacionPushByTopic>(data['data']);
     }
-    if (dataClassName == 'DeviceToken') {
-      return deserialize<_i11.DeviceToken>(data['data']);
+    if (dataClassName == 'ModuleClass') {
+      return deserialize<_i11.ModuleClass>(data['data']);
     }
     return super.deserializeByClassName(data);
   }

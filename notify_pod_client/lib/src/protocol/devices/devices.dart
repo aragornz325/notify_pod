@@ -12,7 +12,6 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../enums/devices_type.dart' as _i2;
 import '../logs/notifications_logs.dart' as _i3;
-import '../junction/device_token.dart' as _i4;
 
 abstract class Device implements _i1.SerializableModel {
   Device._({
@@ -20,10 +19,10 @@ abstract class Device implements _i1.SerializableModel {
     required this.userId,
     required this.idDevice,
     required this.type,
+    required this.tokenFCM,
     this.notificationsLogs,
     required this.createdAt,
     required this.updatedAt,
-    this.register,
   });
 
   factory Device({
@@ -31,10 +30,10 @@ abstract class Device implements _i1.SerializableModel {
     required String userId,
     required String idDevice,
     required _i2.DevicesType type,
+    required String tokenFCM,
     List<_i3.NotificationsLogs>? notificationsLogs,
     required DateTime createdAt,
     required DateTime updatedAt,
-    List<_i4.RegisterDeviceToken>? register,
   }) = _DeviceImpl;
 
   factory Device.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -43,6 +42,7 @@ abstract class Device implements _i1.SerializableModel {
       userId: jsonSerialization['userId'] as String,
       idDevice: jsonSerialization['idDevice'] as String,
       type: _i2.DevicesType.fromJson((jsonSerialization['type'] as int)),
+      tokenFCM: jsonSerialization['tokenFCM'] as String,
       notificationsLogs: (jsonSerialization['notificationsLogs'] as List?)
           ?.map((e) =>
               _i3.NotificationsLogs.fromJson((e as Map<String, dynamic>)))
@@ -51,10 +51,6 @@ abstract class Device implements _i1.SerializableModel {
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       updatedAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
-      register: (jsonSerialization['register'] as List?)
-          ?.map((e) =>
-              _i4.RegisterDeviceToken.fromJson((e as Map<String, dynamic>)))
-          .toList(),
     );
   }
 
@@ -69,23 +65,23 @@ abstract class Device implements _i1.SerializableModel {
 
   _i2.DevicesType type;
 
+  String tokenFCM;
+
   List<_i3.NotificationsLogs>? notificationsLogs;
 
   DateTime createdAt;
 
   DateTime updatedAt;
 
-  List<_i4.RegisterDeviceToken>? register;
-
   Device copyWith({
     int? id,
     String? userId,
     String? idDevice,
     _i2.DevicesType? type,
+    String? tokenFCM,
     List<_i3.NotificationsLogs>? notificationsLogs,
     DateTime? createdAt,
     DateTime? updatedAt,
-    List<_i4.RegisterDeviceToken>? register,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -94,13 +90,12 @@ abstract class Device implements _i1.SerializableModel {
       'userId': userId,
       'idDevice': idDevice,
       'type': type.toJson(),
+      'tokenFCM': tokenFCM,
       if (notificationsLogs != null)
         'notificationsLogs':
             notificationsLogs?.toJson(valueToJson: (v) => v.toJson()),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
-      if (register != null)
-        'register': register?.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -118,19 +113,19 @@ class _DeviceImpl extends Device {
     required String userId,
     required String idDevice,
     required _i2.DevicesType type,
+    required String tokenFCM,
     List<_i3.NotificationsLogs>? notificationsLogs,
     required DateTime createdAt,
     required DateTime updatedAt,
-    List<_i4.RegisterDeviceToken>? register,
   }) : super._(
           id: id,
           userId: userId,
           idDevice: idDevice,
           type: type,
+          tokenFCM: tokenFCM,
           notificationsLogs: notificationsLogs,
           createdAt: createdAt,
           updatedAt: updatedAt,
-          register: register,
         );
 
   @override
@@ -139,24 +134,22 @@ class _DeviceImpl extends Device {
     String? userId,
     String? idDevice,
     _i2.DevicesType? type,
+    String? tokenFCM,
     Object? notificationsLogs = _Undefined,
     DateTime? createdAt,
     DateTime? updatedAt,
-    Object? register = _Undefined,
   }) {
     return Device(
       id: id is int? ? id : this.id,
       userId: userId ?? this.userId,
       idDevice: idDevice ?? this.idDevice,
       type: type ?? this.type,
+      tokenFCM: tokenFCM ?? this.tokenFCM,
       notificationsLogs: notificationsLogs is List<_i3.NotificationsLogs>?
           ? notificationsLogs
           : this.notificationsLogs?.map((e0) => e0.copyWith()).toList(),
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      register: register is List<_i4.RegisterDeviceToken>?
-          ? register
-          : this.register?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }

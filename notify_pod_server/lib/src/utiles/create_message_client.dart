@@ -1,17 +1,21 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:dart_firebase_admin/dart_firebase_admin.dart';
+
+import 'package:googleapis_auth/auth_io.dart';
+import 'package:notify_pod_server/src/generated/protocol.dart';
 // ignore: depend_on_referenced_packages
 import 'package:logging/logging.dart';
-import 'package:notify_pod_server/notify_pod_server.dart';
+import 'package:firebaseapis/fcm/v1.dart';
 import 'package:notify_pod_server/src/utiles/find_project_root_path.dart';
 import 'package:notify_pod_server/src/utiles/get_config_file.dart';
 
-FirebaseAdminApp getAuthByEnvironment({
+Future<FirebaseCloudMessagingApi> initializeFirebaseMessageApi({
   required NotifyEnvironment notifyEnvironment,
   required Logger logger,
-}) {
-
+}) async {
+  logger.fine(
+    'Initializing Firebase Cloud Messaging API...',
+  );
   final currentDirectory = Directory.current;
   final rootPath = findProjectRootPath(
     currentDirectory,
@@ -26,9 +30,12 @@ FirebaseAdminApp getAuthByEnvironment({
     'Configuration file path: $configPath',
   );
 
-  if (!File(configPath).existsSync()) {
+  if (!File(
+    configPath,
+  ).existsSync()) {
     logger.severe(
-      'Firebase initialization error: configuration file not found.',
+      '''FirebaseApi messenger client initialization error: 
+      configuration file not found.''',
     );
     throw Exception(
       'Configuration file not found at: $configPath',
@@ -44,32 +51,20 @@ FirebaseAdminApp getAuthByEnvironment({
     configContent,
   );
 
-  if (!configJson.containsKey(
-    'project_id',
-  )) {
-    logger.severe(
-      '''Firebase initialization error: 
-      configuration file is missing "project_id".''',
-    );
-    throw Exception(
-      'Configuration file does not contain "project_id".',
-    );
-  }
-
-  final projectId = configJson['project_id'] as String;
+  final credentials = ServiceAccountCredentials.fromJson(
+    configJson,
+  );
 
   logger.finer(
-    '''Initializing Firebase for environment: 
-    $notifyEnvironment with project_id: $projectId...''',
+    '''Initializing FirebaseApi client for environment: 
+    $notifyEnvironment''',
+  );
+  final client = await clientViaServiceAccount(
+    credentials,
+    [FirebaseCloudMessagingApi.cloudPlatformScope],
   );
 
-  final FirebaseAdminApp admin = FirebaseAdminApp.initializeApp(
-    projectId, // Extracted project_id from JSON
-    Credential.fromServiceAccount(
-      configFile,
-    ),
+  return FirebaseCloudMessagingApi(
+    client,
   );
-
-
-  return admin;
 }

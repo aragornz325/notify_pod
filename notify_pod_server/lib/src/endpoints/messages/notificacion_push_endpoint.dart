@@ -23,4 +23,24 @@ class MessageEndpoint extends Endpoint with Controller<NotificacionPushServices>
       },
     );
   }
+
+  Future<bool> sendPushNotificationByTopic(
+    Session session,
+    String topic,
+    String message,
+    String title,
+  ) async {
+    return await performControllerOperation<bool>(
+      session: session,
+      endpointName: 'MessageEndpoint',
+      operation: () async {
+        return await service.sendPushNotificationByTopic(
+          session,
+          topic: topic,
+          message: message,
+          title: title,
+        );
+      },
+    );
+  }
 }

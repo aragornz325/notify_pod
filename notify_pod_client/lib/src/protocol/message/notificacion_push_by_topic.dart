@@ -11,47 +11,45 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../enums/notification_status.dart' as _i2;
-import '../devices/devices.dart' as _i3;
 
-abstract class NotificationsLogs implements _i1.SerializableModel {
-  NotificationsLogs._({
+abstract class NotificacionPushByTopic implements _i1.SerializableModel {
+  NotificacionPushByTopic._({
     this.id,
-    required this.notificationId,
+    required this.title,
+    required this.message,
+    required this.topic,
+    required this.sendAt,
     required this.status,
-    this.error,
-    required this.deviceId,
-    this.device,
-    required this.attemptAt,
+    this.readAt,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  factory NotificationsLogs({
+  factory NotificacionPushByTopic({
     int? id,
-    required int notificationId,
+    required String title,
+    required String message,
+    required String topic,
+    required DateTime sendAt,
     required _i2.NotificationStatus status,
-    String? error,
-    required int deviceId,
-    _i3.Device? device,
-    required DateTime attemptAt,
+    DateTime? readAt,
     required DateTime createdAt,
     required DateTime updatedAt,
-  }) = _NotificationsLogsImpl;
+  }) = _NotificacionPushByTopicImpl;
 
-  factory NotificationsLogs.fromJson(Map<String, dynamic> jsonSerialization) {
-    return NotificationsLogs(
+  factory NotificacionPushByTopic.fromJson(
+      Map<String, dynamic> jsonSerialization) {
+    return NotificacionPushByTopic(
       id: jsonSerialization['id'] as int?,
-      notificationId: jsonSerialization['notificationId'] as int,
+      title: jsonSerialization['title'] as String,
+      message: jsonSerialization['message'] as String,
+      topic: jsonSerialization['topic'] as String,
+      sendAt: _i1.DateTimeJsonExtension.fromJson(jsonSerialization['sendAt']),
       status:
           _i2.NotificationStatus.fromJson((jsonSerialization['status'] as int)),
-      error: jsonSerialization['error'] as String?,
-      deviceId: jsonSerialization['deviceId'] as int,
-      device: jsonSerialization['device'] == null
+      readAt: jsonSerialization['readAt'] == null
           ? null
-          : _i3.Device.fromJson(
-              (jsonSerialization['device'] as Map<String, dynamic>)),
-      attemptAt:
-          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['attemptAt']),
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['readAt']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       updatedAt:
@@ -64,30 +62,30 @@ abstract class NotificationsLogs implements _i1.SerializableModel {
   /// the id will be null.
   int? id;
 
-  int notificationId;
+  String title;
+
+  String message;
+
+  String topic;
+
+  DateTime sendAt;
 
   _i2.NotificationStatus status;
 
-  String? error;
-
-  int deviceId;
-
-  _i3.Device? device;
-
-  DateTime attemptAt;
+  DateTime? readAt;
 
   DateTime createdAt;
 
   DateTime updatedAt;
 
-  NotificationsLogs copyWith({
+  NotificacionPushByTopic copyWith({
     int? id,
-    int? notificationId,
+    String? title,
+    String? message,
+    String? topic,
+    DateTime? sendAt,
     _i2.NotificationStatus? status,
-    String? error,
-    int? deviceId,
-    _i3.Device? device,
-    DateTime? attemptAt,
+    DateTime? readAt,
     DateTime? createdAt,
     DateTime? updatedAt,
   });
@@ -95,12 +93,12 @@ abstract class NotificationsLogs implements _i1.SerializableModel {
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
-      'notificationId': notificationId,
+      'title': title,
+      'message': message,
+      'topic': topic,
+      'sendAt': sendAt.toJson(),
       'status': status.toJson(),
-      if (error != null) 'error': error,
-      'deviceId': deviceId,
-      if (device != null) 'device': device?.toJson(),
-      'attemptAt': attemptAt.toJson(),
+      if (readAt != null) 'readAt': readAt?.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
     };
@@ -114,49 +112,49 @@ abstract class NotificationsLogs implements _i1.SerializableModel {
 
 class _Undefined {}
 
-class _NotificationsLogsImpl extends NotificationsLogs {
-  _NotificationsLogsImpl({
+class _NotificacionPushByTopicImpl extends NotificacionPushByTopic {
+  _NotificacionPushByTopicImpl({
     int? id,
-    required int notificationId,
+    required String title,
+    required String message,
+    required String topic,
+    required DateTime sendAt,
     required _i2.NotificationStatus status,
-    String? error,
-    required int deviceId,
-    _i3.Device? device,
-    required DateTime attemptAt,
+    DateTime? readAt,
     required DateTime createdAt,
     required DateTime updatedAt,
   }) : super._(
           id: id,
-          notificationId: notificationId,
+          title: title,
+          message: message,
+          topic: topic,
+          sendAt: sendAt,
           status: status,
-          error: error,
-          deviceId: deviceId,
-          device: device,
-          attemptAt: attemptAt,
+          readAt: readAt,
           createdAt: createdAt,
           updatedAt: updatedAt,
         );
 
   @override
-  NotificationsLogs copyWith({
+  NotificacionPushByTopic copyWith({
     Object? id = _Undefined,
-    int? notificationId,
+    String? title,
+    String? message,
+    String? topic,
+    DateTime? sendAt,
     _i2.NotificationStatus? status,
-    Object? error = _Undefined,
-    int? deviceId,
-    Object? device = _Undefined,
-    DateTime? attemptAt,
+    Object? readAt = _Undefined,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
-    return NotificationsLogs(
+    return NotificacionPushByTopic(
       id: id is int? ? id : this.id,
-      notificationId: notificationId ?? this.notificationId,
+      title: title ?? this.title,
+      message: message ?? this.message,
+      topic: topic ?? this.topic,
+      sendAt: sendAt ?? this.sendAt,
       status: status ?? this.status,
-      error: error is String? ? error : this.error,
-      deviceId: deviceId ?? this.deviceId,
-      device: device is _i3.Device? ? device : this.device?.copyWith(),
-      attemptAt: attemptAt ?? this.attemptAt,
+      readAt: readAt is DateTime? ? readAt : this.readAt,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

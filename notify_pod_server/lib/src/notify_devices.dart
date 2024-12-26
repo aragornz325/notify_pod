@@ -1,5 +1,4 @@
 import 'package:notify_pod_server/src/endpoints/devices/device_endpoint.dart';
-import 'package:notify_pod_server/src/endpoints/messages/notificacion_push_endpoint.dart';
 import 'package:notify_pod_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 
@@ -26,7 +25,7 @@ class NotifyDevices {
   ///
   /// Throws:
   /// - [Exception] if an error occurs while registering the token.
-  Future<bool> registerFCMToken(
+  Future<bool> registerDevice(
     Session session, {
     required String tokenFCM,
     required String userId,
@@ -34,7 +33,7 @@ class NotifyDevices {
     required DevicesType devicesType,
   }) async {
     try {
-      return await DeviceEndpoint().registerFCMToken(
+      return await DeviceEndpoint().registerDevice(
         session,
         tokenFCM,
         userId,
@@ -43,28 +42,10 @@ class NotifyDevices {
       );
     } catch (e) {
       throw Exception(
-        'Error in endpoint registerFCMToken: $e',
+        'Error in endpoint registerDevice: $e',
       );
     }
   }
 
-  Future<bool> sendPushNotification(
-    Session session,
-    String userId,
-    String title,
-    String message,
-  ) async {
-    try {
-      return await MessageEndpoint().sendPushNotificationByUserId(
-        session,
-        userId,
-        title,
-        message,
-      );
-    } catch (e) {
-      throw Exception(
-        'Error in endpoint sendPushNotification: $e',
-      );
-    }
-  }
+
 }

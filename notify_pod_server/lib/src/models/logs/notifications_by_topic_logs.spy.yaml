@@ -1,14 +1,14 @@
-class: NotificationsLogs
-table: serverpod_notifications_logs
+class: NotificationsByTopicLogs
+table: serverpod_notifications_by_topic_logs
 fields:
   notificationId: int
   status: NotificationStatus
   error: String ?
-  device: Device ?, relation(name=device_logs)
+  topic: String ?
   attemptAt: DateTime
   createdAt: DateTime
   updatedAt: DateTime
 indexes:
-  idx_logs_notificationId:
+  idx_logs_topic_notificationId:
     fields: notificationId
     type: btree

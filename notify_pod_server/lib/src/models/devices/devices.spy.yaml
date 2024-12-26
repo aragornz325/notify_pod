@@ -1,14 +1,17 @@
 class: Device
 table: serverpod_devices_notify_pod
 fields:
-    userId: String
-    idDevice: String
-    type: DevicesType
-    notificationsLogs: List<NotificationsLogs>?, relation(name=device_logs)
-    createdAt: DateTime
-    updatedAt: DateTime
-    register: List<RegisterDeviceToken>?, relation(name=device_register)
+  userId: String
+  idDevice: String
+  type: DevicesType
+  tokenFCM: String
+  notificationsLogs: List<NotificationsLogs>?, relation(name=device_logs)
+  createdAt: DateTime
+  updatedAt: DateTime
 indexes:
-    idx_devices_userId:
-        fields: userId
-        type: btree 
+  idx_devices_userId:
+    fields: userId
+    type: btree
+  idDevice:
+    fields: idDevice
+    unique: true

@@ -20,7 +20,7 @@ class EndpointDevice extends _i1.EndpointRef {
   @override
   String get name => 'notify_pod.device';
 
-  _i2.Future<bool> registerFCMToken(
+  _i2.Future<bool> registerDevice(
     String tokenFCM,
     String userId,
     String deviceId,
@@ -28,7 +28,7 @@ class EndpointDevice extends _i1.EndpointRef {
   ) =>
       caller.callServerEndpoint<bool>(
         'notify_pod.device',
-        'registerFCMToken',
+        'registerDevice',
         {
           'tokenFCM': tokenFCM,
           'userId': userId,
@@ -55,6 +55,21 @@ class EndpointMessage extends _i1.EndpointRef {
         'sendPushNotificationByUserId',
         {
           'userId': userId,
+          'message': message,
+          'title': title,
+        },
+      );
+
+  _i2.Future<bool> sendPushNotificationByTopic(
+    String topic,
+    String message,
+    String title,
+  ) =>
+      caller.callServerEndpoint<bool>(
+        'notify_pod.message',
+        'sendPushNotificationByTopic',
+        {
+          'topic': topic,
           'message': message,
           'title': title,
         },

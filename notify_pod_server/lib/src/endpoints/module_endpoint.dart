@@ -29,7 +29,7 @@ class ModuleEndpoint extends Endpoint with Controller<DevicesService> {
       session: session,
       endpointName: 'DeviceEndpoint',
       operation: () async {
-        return await service.registerORUpdateFCMToken(
+        return await service.registerORUpdateDevice(
           session,
           deviceId: deviceId,
           tokenFCM: tokenFCM,

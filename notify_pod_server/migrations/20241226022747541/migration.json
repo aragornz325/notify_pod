@@ -3,165 +3,6 @@
     {
       "type": "createTable",
       "createTable": {
-        "name": "serverpod_device_token",
-        "dartName": "DeviceToken",
-        "module": "notify_pod",
-        "schema": "public",
-        "columns": [
-          {
-            "name": "id",
-            "columnType": 6,
-            "isNullable": false,
-            "columnDefault": "nextval('serverpod_device_token_id_seq'::regclass)",
-            "dartType": "int?"
-          },
-          {
-            "name": "token",
-            "columnType": 0,
-            "isNullable": false,
-            "dartType": "String"
-          },
-          {
-            "name": "userId",
-            "columnType": 0,
-            "isNullable": false,
-            "dartType": "String"
-          },
-          {
-            "name": "type",
-            "columnType": 6,
-            "isNullable": false,
-            "dartType": "protocol:DevicesType"
-          },
-          {
-            "name": "deviceId",
-            "columnType": 0,
-            "isNullable": false,
-            "dartType": "String"
-          },
-          {
-            "name": "createdAt",
-            "columnType": 4,
-            "isNullable": false,
-            "dartType": "DateTime"
-          },
-          {
-            "name": "updatedAt",
-            "columnType": 4,
-            "isNullable": false,
-            "dartType": "DateTime"
-          }
-        ],
-        "foreignKeys": [],
-        "indexes": [
-          {
-            "indexName": "serverpod_device_token_pkey",
-            "elements": [
-              {
-                "type": 0,
-                "definition": "id"
-              }
-            ],
-            "type": "btree",
-            "isUnique": true,
-            "isPrimary": true
-          }
-        ],
-        "managed": true
-      }
-    },
-    {
-      "type": "createTable",
-      "createTable": {
-        "name": "serverpod_device_token_register",
-        "dartName": "RegisterDeviceToken",
-        "module": "notify_pod",
-        "schema": "public",
-        "columns": [
-          {
-            "name": "id",
-            "columnType": 6,
-            "isNullable": false,
-            "columnDefault": "nextval('serverpod_device_token_register_id_seq'::regclass)",
-            "dartType": "int?"
-          },
-          {
-            "name": "deviceId",
-            "columnType": 6,
-            "isNullable": false,
-            "dartType": "int"
-          },
-          {
-            "name": "tokenId",
-            "columnType": 6,
-            "isNullable": false,
-            "dartType": "int"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "constraintName": "serverpod_device_token_register_fk_0",
-            "columns": [
-              "deviceId"
-            ],
-            "referenceTable": "serverpod_devices_notify_pod",
-            "referenceTableSchema": "public",
-            "referenceColumns": [
-              "id"
-            ],
-            "onUpdate": 3,
-            "onDelete": 3
-          },
-          {
-            "constraintName": "serverpod_device_token_register_fk_1",
-            "columns": [
-              "tokenId"
-            ],
-            "referenceTable": "serverpod_device_token",
-            "referenceTableSchema": "public",
-            "referenceColumns": [
-              "id"
-            ],
-            "onUpdate": 3,
-            "onDelete": 3
-          }
-        ],
-        "indexes": [
-          {
-            "indexName": "serverpod_device_token_register_pkey",
-            "elements": [
-              {
-                "type": 0,
-                "definition": "id"
-              }
-            ],
-            "type": "btree",
-            "isUnique": true,
-            "isPrimary": true
-          },
-          {
-            "indexName": "devices_token_index",
-            "elements": [
-              {
-                "type": 0,
-                "definition": "deviceId"
-              },
-              {
-                "type": 0,
-                "definition": "tokenId"
-              }
-            ],
-            "type": "btree",
-            "isUnique": true,
-            "isPrimary": false
-          }
-        ],
-        "managed": true
-      }
-    },
-    {
-      "type": "createTable",
-      "createTable": {
         "name": "serverpod_devices_notify_pod",
         "dartName": "Device",
         "module": "notify_pod",
@@ -191,6 +32,12 @@
             "columnType": 6,
             "isNullable": false,
             "dartType": "protocol:DevicesType"
+          },
+          {
+            "name": "tokenFCM",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
           },
           {
             "name": "createdAt",
@@ -229,6 +76,18 @@
             ],
             "type": "btree",
             "isUnique": false,
+            "isPrimary": false
+          },
+          {
+            "indexName": "idDevice",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "idDevice"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
             "isPrimary": false
           }
         ],
@@ -327,18 +186,6 @@
               {
                 "type": 0,
                 "definition": "notificationId"
-              }
-            ],
-            "type": "btree",
-            "isUnique": false,
-            "isPrimary": false
-          },
-          {
-            "indexName": "idx_logs_deviceId",
-            "elements": [
-              {
-                "type": 0,
-                "definition": "deviceId"
               }
             ],
             "type": "btree",

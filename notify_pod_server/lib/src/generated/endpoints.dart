@@ -42,8 +42,8 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'device',
       endpoint: endpoints['device']!,
       methodConnectors: {
-        'registerFCMToken': _i1.MethodConnector(
-          name: 'registerFCMToken',
+        'registerDevice': _i1.MethodConnector(
+          name: 'registerDevice',
           params: {
             'tokenFCM': _i1.ParameterDescription(
               name: 'tokenFCM',
@@ -70,7 +70,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['device'] as _i2.DeviceEndpoint).registerFCMToken(
+              (endpoints['device'] as _i2.DeviceEndpoint).registerDevice(
             session,
             params['tokenFCM'],
             params['userId'],
@@ -114,7 +114,38 @@ class Endpoints extends _i1.EndpointDispatch {
             params['message'],
             params['title'],
           ),
-        )
+        ),
+        'sendPushNotificationByTopic': _i1.MethodConnector(
+          name: 'sendPushNotificationByTopic',
+          params: {
+            'topic': _i1.ParameterDescription(
+              name: 'topic',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'message': _i1.ParameterDescription(
+              name: 'message',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'title': _i1.ParameterDescription(
+              name: 'title',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['message'] as _i3.MessageEndpoint)
+                  .sendPushNotificationByTopic(
+            session,
+            params['topic'],
+            params['message'],
+            params['title'],
+          ),
+        ),
       },
     );
     connectors['module'] = _i1.EndpointConnector(

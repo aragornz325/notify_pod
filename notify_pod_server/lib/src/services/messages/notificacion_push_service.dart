@@ -15,28 +15,24 @@ class NotificacionPushServices extends Service {
     required String userId,
   }) async {
     final now = DateTime.now().toUtc();
-    return await performOperation<bool>(
-      operationName: 'sendMessageByUserId',
-      operation: () async {
-        final tokens = await _devicesService.getAllDevicesTokens(
-          session,
-          userId: userId,
-        );
-        if (tokens == null || tokens.isEmpty) {
-          throw NotifyPodException(
-            title: 'No devices found',
-            error: 'No devices found for user $userId',
-          );
-        }
+    final devices = await _devicesService.getAllUserDevices(
+      session,
+      userId: userId,
+    );
+    if (devices == null || devices.isEmpty) {
+      logger.shout(
+        'no devices found for user $userId',
+      );
+      return false;
+    }
 
-        logger.fine(
-          'Registering notification for ${tokens.length} devices',
-        );
-
-        for (final token in tokens) {
-          final messageInDb = await NotificacionPush.db.insert(session, [
+    for (final device in devices) {
+      final messageInDb = await performOperation<NotificacionPush>(
+        operationName: 'insert notification in db',
+        operation: () async {
+          final notification = await NotificacionPush.db.insert(session, [
             NotificacionPush(
-              deviceId: token.deviceId,
+              deviceId: device.idDevice,
               userId: userId,
               title: title,
               message: message,
@@ -46,95 +42,189 @@ class NotificacionPushServices extends Service {
               status: NotificationStatus.PENDING,
             ),
           ]);
+          return notification.first;
+        },
+      );
+      try {
+        logger.fine(
+          'sending push notification to device ${device.idDevice}',
+        );
 
-          try {
-            logger.fine(
-              'Sending message to ${token.deviceId}',
+        await _messaging.send(
+          TokenMessage(
+            token: device.tokenFCM,
+            notification: Notification(
+              title: title,
+              body: message,
+            ),
+          ),
+        );
+        await performOperation(
+          operationName: 'update notification status',
+          operation: () async {
+            await NotificacionPush.db.update(
+              session,
+              [
+                messageInDb.copyWith(
+                  status: NotificationStatus.SENT,
+                  updatedAt: now,
+                )
+              ],
             );
-            await _messaging.send(
-              TokenMessage(
-                token: token.token,
-                notification: Notification(
-                  title: title,
-                  body: message,
+          },
+        );
+        await performOperation(
+          operationName: 'register log',
+          operation: () async {
+            await NotificationsLogs.db.insert(
+              session,
+              [
+                NotificationsLogs(
+                  notificationId: messageInDb.id!,
+                  deviceId: device.id!,
+                  createdAt: now,
+                  updatedAt: now,
+                  attemptAt: now,
+                  status: NotificationStatus.SENT,
                 ),
-              ),
+              ],
             );
-            logger.fine(
-              'Message sent to ${token.deviceId}',
+          },
+        );
+      } catch (e) {
+        logger.shout(
+          'error: $e',
+          e,
+        );
+        await performOperation(
+          operationName: 'register notification log in fail',
+          operation: () async {
+            await NotificationsLogs.db.insert(
+              session,
+              [
+                NotificationsLogs(
+                  notificationId: messageInDb.id!,
+                  deviceId: device.id!,
+                  createdAt: now,
+                  updatedAt: now,
+                  attemptAt: now,
+                  status: NotificationStatus.FAILED,
+                  error: e.toString(),
+                ),
+              ],
             );
+          },
+        );
+      }
+    }
+    return true;
+  }
 
-            await performOperation(
-              operationName: 'update push notification status',
-              operation: () async {
-                await NotificacionPush.db.update(
-                  session,
-                  [
-                    messageInDb.first.copyWith(
-                      status: NotificationStatus.SENT,
-                      updatedAt: now,
-                    ),
-                  ],
-                );
-                await NotificationsLogs.db.insert(
-                  session,
-                  [
-                    NotificationsLogs(
-                      deviceId: token.id!,
-                      notificationId: messageInDb.first.id!,
-                      attemptAt: now,
-                      createdAt: now,
-                      updatedAt: now,
-                      status: NotificationStatus.SENT,
-                    ),
-                  ],
-                );
-              },
-            );
-          } catch (e, st) {
-            logger.severe(
-              'Error sending message to ${token.deviceId}',
-              e,
-            );
+  Future<bool> sendPushNotificationByTopic(
+    Session session, {
+    required String title,
+    required String message,
+    required String topic,
+  }) async {
+    final now = DateTime.now().toUtc();
 
-            await performOperation(
-              operationName: 'fail on send push notification',
-              operation: () async {
-                await NotificacionPush.db.update(
-                  session,
-                  [
-                    messageInDb.first.copyWith(
-                      status: NotificationStatus.FAILED,
-                      updatedAt: DateTime.now().toUtc(),
-                    ),
-                  ],
-                );
-                await NotificationsLogs.db.insert(
-                  session,
-                  [
-                    NotificationsLogs(
-                      deviceId: token.id!,
-                      notificationId: messageInDb.first.id!,
-                      error: e.toString(),
-                      attemptAt: DateTime.now().toUtc(),
-                      createdAt: DateTime.now().toUtc(),
-                      updatedAt: DateTime.now().toUtc(),
-                      status: NotificationStatus.FAILED,
-                    ),
-                  ],
-                ).onError((e, st) {
-                  throw NotifyPodException(
-                    title: 'Failed to log notification',
-                    error: e.toString(),
-                    stackTrace: st.toString(),
-                  );
-                });
-              },
-            );
-          }
-        }
-        return false;
+    final messageInDb = await performOperation<NotificacionPushByTopic>(
+      operationName: 'insert notification in db',
+      operation: () async {
+        final notification = await NotificacionPushByTopic.db.insert(session, [
+          NotificacionPushByTopic(
+            topic: topic,
+            title: title,
+            message: message,
+            sendAt: now,
+            createdAt: now,
+            updatedAt: now,
+            status: NotificationStatus.PENDING,
+          ),
+        ]);
+        return notification.first;
       },
     );
+    try {
+      await _messaging.send(
+        TopicMessage(
+          topic: topic,
+          notification: Notification(
+            title: title,
+            body: message,
+          ),
+        ),
+      );
+      await performOperation(
+        operationName: 'update notification status',
+        operation: () async {
+          await NotificacionPushByTopic.db.update(
+            session,
+            [
+              messageInDb.copyWith(
+                status: NotificationStatus.SENT,
+                updatedAt: now,
+              )
+            ],
+          );
+          await performOperation(
+            operationName: 'register topic notification log',
+            operation: () async {
+              await NotificationsByTopicLogs.db.insert(
+                session,
+                [
+                  NotificationsByTopicLogs(
+                    notificationId: messageInDb.id!,
+                    createdAt: now,
+                    updatedAt: now,
+                    attemptAt: now,
+                    status: NotificationStatus.SENT,
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      );
+      return true;
+    } catch (e) {
+      logger.shout(
+        'error: $e',
+        e,
+      );
+      await performOperation(
+        operationName: 'update notification status',
+        operation: () async {
+          await NotificacionPushByTopic.db.update(
+            session,
+            [
+              messageInDb.copyWith(
+                status: NotificationStatus.FAILED,
+                updatedAt: now,
+              )
+            ],
+          );
+          await performOperation(
+            operationName: 'register topic notification log on fail ',
+            operation: () async {
+              await NotificationsByTopicLogs.db.insert(
+                session,
+                [
+                  NotificationsByTopicLogs(
+                    notificationId: messageInDb.id!,
+                    createdAt: now,
+                    updatedAt: now,
+                    attemptAt: now,
+                    status: NotificationStatus.FAILED,
+                    error: e.toString(),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      );
+      return false;
+    }
   }
 }

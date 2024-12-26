@@ -11,46 +11,40 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../enums/notification_status.dart' as _i2;
-import '../devices/devices.dart' as _i3;
 
-abstract class NotificationsLogs
+abstract class NotificationsByTopicLogs
     implements _i1.TableRow, _i1.ProtocolSerialization {
-  NotificationsLogs._({
+  NotificationsByTopicLogs._({
     this.id,
     required this.notificationId,
     required this.status,
     this.error,
-    required this.deviceId,
-    this.device,
+    this.topic,
     required this.attemptAt,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  factory NotificationsLogs({
+  factory NotificationsByTopicLogs({
     int? id,
     required int notificationId,
     required _i2.NotificationStatus status,
     String? error,
-    required int deviceId,
-    _i3.Device? device,
+    String? topic,
     required DateTime attemptAt,
     required DateTime createdAt,
     required DateTime updatedAt,
-  }) = _NotificationsLogsImpl;
+  }) = _NotificationsByTopicLogsImpl;
 
-  factory NotificationsLogs.fromJson(Map<String, dynamic> jsonSerialization) {
-    return NotificationsLogs(
+  factory NotificationsByTopicLogs.fromJson(
+      Map<String, dynamic> jsonSerialization) {
+    return NotificationsByTopicLogs(
       id: jsonSerialization['id'] as int?,
       notificationId: jsonSerialization['notificationId'] as int,
       status:
           _i2.NotificationStatus.fromJson((jsonSerialization['status'] as int)),
       error: jsonSerialization['error'] as String?,
-      deviceId: jsonSerialization['deviceId'] as int,
-      device: jsonSerialization['device'] == null
-          ? null
-          : _i3.Device.fromJson(
-              (jsonSerialization['device'] as Map<String, dynamic>)),
+      topic: jsonSerialization['topic'] as String?,
       attemptAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['attemptAt']),
       createdAt:
@@ -60,9 +54,9 @@ abstract class NotificationsLogs
     );
   }
 
-  static final t = NotificationsLogsTable();
+  static final t = NotificationsByTopicLogsTable();
 
-  static const db = NotificationsLogsRepository._();
+  static const db = NotificationsByTopicLogsRepository._();
 
   @override
   int? id;
@@ -73,9 +67,7 @@ abstract class NotificationsLogs
 
   String? error;
 
-  int deviceId;
-
-  _i3.Device? device;
+  String? topic;
 
   DateTime attemptAt;
 
@@ -86,13 +78,12 @@ abstract class NotificationsLogs
   @override
   _i1.Table get table => t;
 
-  NotificationsLogs copyWith({
+  NotificationsByTopicLogs copyWith({
     int? id,
     int? notificationId,
     _i2.NotificationStatus? status,
     String? error,
-    int? deviceId,
-    _i3.Device? device,
+    String? topic,
     DateTime? attemptAt,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -104,8 +95,7 @@ abstract class NotificationsLogs
       'notificationId': notificationId,
       'status': status.toJson(),
       if (error != null) 'error': error,
-      'deviceId': deviceId,
-      if (device != null) 'device': device?.toJson(),
+      if (topic != null) 'topic': topic,
       'attemptAt': attemptAt.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
@@ -119,34 +109,33 @@ abstract class NotificationsLogs
       'notificationId': notificationId,
       'status': status.toJson(),
       if (error != null) 'error': error,
-      'deviceId': deviceId,
-      if (device != null) 'device': device?.toJsonForProtocol(),
+      if (topic != null) 'topic': topic,
       'attemptAt': attemptAt.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
     };
   }
 
-  static NotificationsLogsInclude include({_i3.DeviceInclude? device}) {
-    return NotificationsLogsInclude._(device: device);
+  static NotificationsByTopicLogsInclude include() {
+    return NotificationsByTopicLogsInclude._();
   }
 
-  static NotificationsLogsIncludeList includeList({
-    _i1.WhereExpressionBuilder<NotificationsLogsTable>? where,
+  static NotificationsByTopicLogsIncludeList includeList({
+    _i1.WhereExpressionBuilder<NotificationsByTopicLogsTable>? where,
     int? limit,
     int? offset,
-    _i1.OrderByBuilder<NotificationsLogsTable>? orderBy,
+    _i1.OrderByBuilder<NotificationsByTopicLogsTable>? orderBy,
     bool orderDescending = false,
-    _i1.OrderByListBuilder<NotificationsLogsTable>? orderByList,
-    NotificationsLogsInclude? include,
+    _i1.OrderByListBuilder<NotificationsByTopicLogsTable>? orderByList,
+    NotificationsByTopicLogsInclude? include,
   }) {
-    return NotificationsLogsIncludeList._(
+    return NotificationsByTopicLogsIncludeList._(
       where: where,
       limit: limit,
       offset: offset,
-      orderBy: orderBy?.call(NotificationsLogs.t),
+      orderBy: orderBy?.call(NotificationsByTopicLogs.t),
       orderDescending: orderDescending,
-      orderByList: orderByList?.call(NotificationsLogs.t),
+      orderByList: orderByList?.call(NotificationsByTopicLogs.t),
       include: include,
     );
   }
@@ -159,14 +148,13 @@ abstract class NotificationsLogs
 
 class _Undefined {}
 
-class _NotificationsLogsImpl extends NotificationsLogs {
-  _NotificationsLogsImpl({
+class _NotificationsByTopicLogsImpl extends NotificationsByTopicLogs {
+  _NotificationsByTopicLogsImpl({
     int? id,
     required int notificationId,
     required _i2.NotificationStatus status,
     String? error,
-    required int deviceId,
-    _i3.Device? device,
+    String? topic,
     required DateTime attemptAt,
     required DateTime createdAt,
     required DateTime updatedAt,
@@ -175,32 +163,29 @@ class _NotificationsLogsImpl extends NotificationsLogs {
           notificationId: notificationId,
           status: status,
           error: error,
-          deviceId: deviceId,
-          device: device,
+          topic: topic,
           attemptAt: attemptAt,
           createdAt: createdAt,
           updatedAt: updatedAt,
         );
 
   @override
-  NotificationsLogs copyWith({
+  NotificationsByTopicLogs copyWith({
     Object? id = _Undefined,
     int? notificationId,
     _i2.NotificationStatus? status,
     Object? error = _Undefined,
-    int? deviceId,
-    Object? device = _Undefined,
+    Object? topic = _Undefined,
     DateTime? attemptAt,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
-    return NotificationsLogs(
+    return NotificationsByTopicLogs(
       id: id is int? ? id : this.id,
       notificationId: notificationId ?? this.notificationId,
       status: status ?? this.status,
       error: error is String? ? error : this.error,
-      deviceId: deviceId ?? this.deviceId,
-      device: device is _i3.Device? ? device : this.device?.copyWith(),
+      topic: topic is String? ? topic : this.topic,
       attemptAt: attemptAt ?? this.attemptAt,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -208,9 +193,9 @@ class _NotificationsLogsImpl extends NotificationsLogs {
   }
 }
 
-class NotificationsLogsTable extends _i1.Table {
-  NotificationsLogsTable({super.tableRelation})
-      : super(tableName: 'serverpod_notifications_logs') {
+class NotificationsByTopicLogsTable extends _i1.Table {
+  NotificationsByTopicLogsTable({super.tableRelation})
+      : super(tableName: 'serverpod_notifications_by_topic_logs') {
     notificationId = _i1.ColumnInt(
       'notificationId',
       this,
@@ -224,8 +209,8 @@ class NotificationsLogsTable extends _i1.Table {
       'error',
       this,
     );
-    deviceId = _i1.ColumnInt(
-      'deviceId',
+    topic = _i1.ColumnString(
+      'topic',
       this,
     );
     attemptAt = _i1.ColumnDateTime(
@@ -248,9 +233,7 @@ class NotificationsLogsTable extends _i1.Table {
 
   late final _i1.ColumnString error;
 
-  late final _i1.ColumnInt deviceId;
-
-  _i3.DeviceTable? _device;
+  late final _i1.ColumnString topic;
 
   late final _i1.ColumnDateTime attemptAt;
 
@@ -258,57 +241,32 @@ class NotificationsLogsTable extends _i1.Table {
 
   late final _i1.ColumnDateTime updatedAt;
 
-  _i3.DeviceTable get device {
-    if (_device != null) return _device!;
-    _device = _i1.createRelationTable(
-      relationFieldName: 'device',
-      field: NotificationsLogs.t.deviceId,
-      foreignField: _i3.Device.t.id,
-      tableRelation: tableRelation,
-      createTable: (foreignTableRelation) =>
-          _i3.DeviceTable(tableRelation: foreignTableRelation),
-    );
-    return _device!;
-  }
-
   @override
   List<_i1.Column> get columns => [
         id,
         notificationId,
         status,
         error,
-        deviceId,
+        topic,
         attemptAt,
         createdAt,
         updatedAt,
       ];
-
-  @override
-  _i1.Table? getRelationTable(String relationField) {
-    if (relationField == 'device') {
-      return device;
-    }
-    return null;
-  }
 }
 
-class NotificationsLogsInclude extends _i1.IncludeObject {
-  NotificationsLogsInclude._({_i3.DeviceInclude? device}) {
-    _device = device;
-  }
-
-  _i3.DeviceInclude? _device;
+class NotificationsByTopicLogsInclude extends _i1.IncludeObject {
+  NotificationsByTopicLogsInclude._();
 
   @override
-  Map<String, _i1.Include?> get includes => {'device': _device};
+  Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table get table => NotificationsLogs.t;
+  _i1.Table get table => NotificationsByTopicLogs.t;
 }
 
-class NotificationsLogsIncludeList extends _i1.IncludeList {
-  NotificationsLogsIncludeList._({
-    _i1.WhereExpressionBuilder<NotificationsLogsTable>? where,
+class NotificationsByTopicLogsIncludeList extends _i1.IncludeList {
+  NotificationsByTopicLogsIncludeList._({
+    _i1.WhereExpressionBuilder<NotificationsByTopicLogsTable>? where,
     super.limit,
     super.offset,
     super.orderBy,
@@ -316,193 +274,160 @@ class NotificationsLogsIncludeList extends _i1.IncludeList {
     super.orderByList,
     super.include,
   }) {
-    super.where = where?.call(NotificationsLogs.t);
+    super.where = where?.call(NotificationsByTopicLogs.t);
   }
 
   @override
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table get table => NotificationsLogs.t;
+  _i1.Table get table => NotificationsByTopicLogs.t;
 }
 
-class NotificationsLogsRepository {
-  const NotificationsLogsRepository._();
+class NotificationsByTopicLogsRepository {
+  const NotificationsByTopicLogsRepository._();
 
-  final attachRow = const NotificationsLogsAttachRowRepository._();
-
-  Future<List<NotificationsLogs>> find(
+  Future<List<NotificationsByTopicLogs>> find(
     _i1.Session session, {
-    _i1.WhereExpressionBuilder<NotificationsLogsTable>? where,
+    _i1.WhereExpressionBuilder<NotificationsByTopicLogsTable>? where,
     int? limit,
     int? offset,
-    _i1.OrderByBuilder<NotificationsLogsTable>? orderBy,
+    _i1.OrderByBuilder<NotificationsByTopicLogsTable>? orderBy,
     bool orderDescending = false,
-    _i1.OrderByListBuilder<NotificationsLogsTable>? orderByList,
+    _i1.OrderByListBuilder<NotificationsByTopicLogsTable>? orderByList,
     _i1.Transaction? transaction,
-    NotificationsLogsInclude? include,
   }) async {
-    return session.db.find<NotificationsLogs>(
-      where: where?.call(NotificationsLogs.t),
-      orderBy: orderBy?.call(NotificationsLogs.t),
-      orderByList: orderByList?.call(NotificationsLogs.t),
+    return session.db.find<NotificationsByTopicLogs>(
+      where: where?.call(NotificationsByTopicLogs.t),
+      orderBy: orderBy?.call(NotificationsByTopicLogs.t),
+      orderByList: orderByList?.call(NotificationsByTopicLogs.t),
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
       transaction: transaction,
-      include: include,
     );
   }
 
-  Future<NotificationsLogs?> findFirstRow(
+  Future<NotificationsByTopicLogs?> findFirstRow(
     _i1.Session session, {
-    _i1.WhereExpressionBuilder<NotificationsLogsTable>? where,
+    _i1.WhereExpressionBuilder<NotificationsByTopicLogsTable>? where,
     int? offset,
-    _i1.OrderByBuilder<NotificationsLogsTable>? orderBy,
+    _i1.OrderByBuilder<NotificationsByTopicLogsTable>? orderBy,
     bool orderDescending = false,
-    _i1.OrderByListBuilder<NotificationsLogsTable>? orderByList,
+    _i1.OrderByListBuilder<NotificationsByTopicLogsTable>? orderByList,
     _i1.Transaction? transaction,
-    NotificationsLogsInclude? include,
   }) async {
-    return session.db.findFirstRow<NotificationsLogs>(
-      where: where?.call(NotificationsLogs.t),
-      orderBy: orderBy?.call(NotificationsLogs.t),
-      orderByList: orderByList?.call(NotificationsLogs.t),
+    return session.db.findFirstRow<NotificationsByTopicLogs>(
+      where: where?.call(NotificationsByTopicLogs.t),
+      orderBy: orderBy?.call(NotificationsByTopicLogs.t),
+      orderByList: orderByList?.call(NotificationsByTopicLogs.t),
       orderDescending: orderDescending,
       offset: offset,
       transaction: transaction,
-      include: include,
     );
   }
 
-  Future<NotificationsLogs?> findById(
+  Future<NotificationsByTopicLogs?> findById(
     _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
-    NotificationsLogsInclude? include,
   }) async {
-    return session.db.findById<NotificationsLogs>(
+    return session.db.findById<NotificationsByTopicLogs>(
       id,
       transaction: transaction,
-      include: include,
     );
   }
 
-  Future<List<NotificationsLogs>> insert(
+  Future<List<NotificationsByTopicLogs>> insert(
     _i1.Session session,
-    List<NotificationsLogs> rows, {
+    List<NotificationsByTopicLogs> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.insert<NotificationsLogs>(
+    return session.db.insert<NotificationsByTopicLogs>(
       rows,
       transaction: transaction,
     );
   }
 
-  Future<NotificationsLogs> insertRow(
+  Future<NotificationsByTopicLogs> insertRow(
     _i1.Session session,
-    NotificationsLogs row, {
+    NotificationsByTopicLogs row, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.insertRow<NotificationsLogs>(
+    return session.db.insertRow<NotificationsByTopicLogs>(
       row,
       transaction: transaction,
     );
   }
 
-  Future<List<NotificationsLogs>> update(
+  Future<List<NotificationsByTopicLogs>> update(
     _i1.Session session,
-    List<NotificationsLogs> rows, {
-    _i1.ColumnSelections<NotificationsLogsTable>? columns,
+    List<NotificationsByTopicLogs> rows, {
+    _i1.ColumnSelections<NotificationsByTopicLogsTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.update<NotificationsLogs>(
+    return session.db.update<NotificationsByTopicLogs>(
       rows,
-      columns: columns?.call(NotificationsLogs.t),
+      columns: columns?.call(NotificationsByTopicLogs.t),
       transaction: transaction,
     );
   }
 
-  Future<NotificationsLogs> updateRow(
+  Future<NotificationsByTopicLogs> updateRow(
     _i1.Session session,
-    NotificationsLogs row, {
-    _i1.ColumnSelections<NotificationsLogsTable>? columns,
+    NotificationsByTopicLogs row, {
+    _i1.ColumnSelections<NotificationsByTopicLogsTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.updateRow<NotificationsLogs>(
+    return session.db.updateRow<NotificationsByTopicLogs>(
       row,
-      columns: columns?.call(NotificationsLogs.t),
+      columns: columns?.call(NotificationsByTopicLogs.t),
       transaction: transaction,
     );
   }
 
-  Future<List<NotificationsLogs>> delete(
+  Future<List<NotificationsByTopicLogs>> delete(
     _i1.Session session,
-    List<NotificationsLogs> rows, {
+    List<NotificationsByTopicLogs> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.delete<NotificationsLogs>(
+    return session.db.delete<NotificationsByTopicLogs>(
       rows,
       transaction: transaction,
     );
   }
 
-  Future<NotificationsLogs> deleteRow(
+  Future<NotificationsByTopicLogs> deleteRow(
     _i1.Session session,
-    NotificationsLogs row, {
+    NotificationsByTopicLogs row, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.deleteRow<NotificationsLogs>(
+    return session.db.deleteRow<NotificationsByTopicLogs>(
       row,
       transaction: transaction,
     );
   }
 
-  Future<List<NotificationsLogs>> deleteWhere(
+  Future<List<NotificationsByTopicLogs>> deleteWhere(
     _i1.Session session, {
-    required _i1.WhereExpressionBuilder<NotificationsLogsTable> where,
+    required _i1.WhereExpressionBuilder<NotificationsByTopicLogsTable> where,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.deleteWhere<NotificationsLogs>(
-      where: where(NotificationsLogs.t),
+    return session.db.deleteWhere<NotificationsByTopicLogs>(
+      where: where(NotificationsByTopicLogs.t),
       transaction: transaction,
     );
   }
 
   Future<int> count(
     _i1.Session session, {
-    _i1.WhereExpressionBuilder<NotificationsLogsTable>? where,
+    _i1.WhereExpressionBuilder<NotificationsByTopicLogsTable>? where,
     int? limit,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.count<NotificationsLogs>(
-      where: where?.call(NotificationsLogs.t),
+    return session.db.count<NotificationsByTopicLogs>(
+      where: where?.call(NotificationsByTopicLogs.t),
       limit: limit,
-      transaction: transaction,
-    );
-  }
-}
-
-class NotificationsLogsAttachRowRepository {
-  const NotificationsLogsAttachRowRepository._();
-
-  Future<void> device(
-    _i1.Session session,
-    NotificationsLogs notificationsLogs,
-    _i3.Device device, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (notificationsLogs.id == null) {
-      throw ArgumentError.notNull('notificationsLogs.id');
-    }
-    if (device.id == null) {
-      throw ArgumentError.notNull('device.id');
-    }
-
-    var $notificationsLogs = notificationsLogs.copyWith(deviceId: device.id);
-    await session.db.updateRow<NotificationsLogs>(
-      $notificationsLogs,
-      columns: [NotificationsLogs.t.deviceId],
       transaction: transaction,
     );
   }

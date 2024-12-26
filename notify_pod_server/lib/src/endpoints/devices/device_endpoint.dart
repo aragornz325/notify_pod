@@ -4,7 +4,7 @@ import 'package:notify_pod_server/src/services/devices/devices_service.dart';
 import 'package:serverpod/serverpod.dart';
 
 class DeviceEndpoint extends Endpoint with Controller<DevicesService> {
-  Future<bool> registerFCMToken(
+  Future<bool> registerDevice(
     Session session,
     String tokenFCM,
     String userId,
@@ -15,7 +15,7 @@ class DeviceEndpoint extends Endpoint with Controller<DevicesService> {
       session: session,
       endpointName: 'DeviceEndpoint',
       operation: () async {
-        return await service.registerORUpdateFCMToken(
+        return await service.registerORUpdateDevice (
           session,
           deviceId: deviceId,
           tokenFCM: tokenFCM,

@@ -134,7 +134,7 @@ class _DeviceEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<bool> registerFCMToken(
+  _i3.Future<bool> registerDevice(
     _i1.TestSessionBuilder sessionBuilder,
     String tokenFCM,
     String userId,
@@ -145,13 +145,13 @@ class _DeviceEndpoint {
       var _localUniqueSession =
           (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
         endpoint: 'device',
-        method: 'registerFCMToken',
+        method: 'registerDevice',
       );
       try {
         var _localCallContext = await _endpointDispatch.getMethodCallContext(
           createSessionCallback: (_) => _localUniqueSession,
           endpointPath: 'device',
-          methodName: 'registerFCMToken',
+          methodName: 'registerDevice',
           parameters: _i1.testObjectToJson({
             'tokenFCM': tokenFCM,
             'userId': userId,
@@ -201,6 +201,41 @@ class _MessageEndpoint {
           methodName: 'sendPushNotificationByUserId',
           parameters: _i1.testObjectToJson({
             'userId': userId,
+            'message': message,
+            'title': title,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<bool>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<bool> sendPushNotificationByTopic(
+    _i1.TestSessionBuilder sessionBuilder,
+    String topic,
+    String message,
+    String title,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'message',
+        method: 'sendPushNotificationByTopic',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'message',
+          methodName: 'sendPushNotificationByTopic',
+          parameters: _i1.testObjectToJson({
+            'topic': topic,
             'message': message,
             'title': title,
           }),

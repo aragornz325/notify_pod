@@ -1,0 +1,18 @@
+class: NotificacionPushByTopic
+table: serverpod_push_notificacion_by_topic
+fields:
+    title: String
+    message: String
+    topic: String
+    sendAt: DateTime
+    status: NotificationStatus
+    readAt: DateTime ?
+    createdAt: DateTime
+    updatedAt: DateTime
+indexes:
+    idx_notifications_topic:
+        fields: topic
+        type: btree
+    idx_notifications_topic_status:
+        fields: status
+        type: btree

@@ -11,45 +11,39 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../enums/notification_status.dart' as _i2;
-import '../devices/devices.dart' as _i3;
 
-abstract class NotificationsLogs implements _i1.SerializableModel {
-  NotificationsLogs._({
+abstract class NotificationsByTopicLogs implements _i1.SerializableModel {
+  NotificationsByTopicLogs._({
     this.id,
     required this.notificationId,
     required this.status,
     this.error,
-    required this.deviceId,
-    this.device,
+    this.topic,
     required this.attemptAt,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  factory NotificationsLogs({
+  factory NotificationsByTopicLogs({
     int? id,
     required int notificationId,
     required _i2.NotificationStatus status,
     String? error,
-    required int deviceId,
-    _i3.Device? device,
+    String? topic,
     required DateTime attemptAt,
     required DateTime createdAt,
     required DateTime updatedAt,
-  }) = _NotificationsLogsImpl;
+  }) = _NotificationsByTopicLogsImpl;
 
-  factory NotificationsLogs.fromJson(Map<String, dynamic> jsonSerialization) {
-    return NotificationsLogs(
+  factory NotificationsByTopicLogs.fromJson(
+      Map<String, dynamic> jsonSerialization) {
+    return NotificationsByTopicLogs(
       id: jsonSerialization['id'] as int?,
       notificationId: jsonSerialization['notificationId'] as int,
       status:
           _i2.NotificationStatus.fromJson((jsonSerialization['status'] as int)),
       error: jsonSerialization['error'] as String?,
-      deviceId: jsonSerialization['deviceId'] as int,
-      device: jsonSerialization['device'] == null
-          ? null
-          : _i3.Device.fromJson(
-              (jsonSerialization['device'] as Map<String, dynamic>)),
+      topic: jsonSerialization['topic'] as String?,
       attemptAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['attemptAt']),
       createdAt:
@@ -70,9 +64,7 @@ abstract class NotificationsLogs implements _i1.SerializableModel {
 
   String? error;
 
-  int deviceId;
-
-  _i3.Device? device;
+  String? topic;
 
   DateTime attemptAt;
 
@@ -80,13 +72,12 @@ abstract class NotificationsLogs implements _i1.SerializableModel {
 
   DateTime updatedAt;
 
-  NotificationsLogs copyWith({
+  NotificationsByTopicLogs copyWith({
     int? id,
     int? notificationId,
     _i2.NotificationStatus? status,
     String? error,
-    int? deviceId,
-    _i3.Device? device,
+    String? topic,
     DateTime? attemptAt,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -98,8 +89,7 @@ abstract class NotificationsLogs implements _i1.SerializableModel {
       'notificationId': notificationId,
       'status': status.toJson(),
       if (error != null) 'error': error,
-      'deviceId': deviceId,
-      if (device != null) 'device': device?.toJson(),
+      if (topic != null) 'topic': topic,
       'attemptAt': attemptAt.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
@@ -114,14 +104,13 @@ abstract class NotificationsLogs implements _i1.SerializableModel {
 
 class _Undefined {}
 
-class _NotificationsLogsImpl extends NotificationsLogs {
-  _NotificationsLogsImpl({
+class _NotificationsByTopicLogsImpl extends NotificationsByTopicLogs {
+  _NotificationsByTopicLogsImpl({
     int? id,
     required int notificationId,
     required _i2.NotificationStatus status,
     String? error,
-    required int deviceId,
-    _i3.Device? device,
+    String? topic,
     required DateTime attemptAt,
     required DateTime createdAt,
     required DateTime updatedAt,
@@ -130,32 +119,29 @@ class _NotificationsLogsImpl extends NotificationsLogs {
           notificationId: notificationId,
           status: status,
           error: error,
-          deviceId: deviceId,
-          device: device,
+          topic: topic,
           attemptAt: attemptAt,
           createdAt: createdAt,
           updatedAt: updatedAt,
         );
 
   @override
-  NotificationsLogs copyWith({
+  NotificationsByTopicLogs copyWith({
     Object? id = _Undefined,
     int? notificationId,
     _i2.NotificationStatus? status,
     Object? error = _Undefined,
-    int? deviceId,
-    Object? device = _Undefined,
+    Object? topic = _Undefined,
     DateTime? attemptAt,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
-    return NotificationsLogs(
+    return NotificationsByTopicLogs(
       id: id is int? ? id : this.id,
       notificationId: notificationId ?? this.notificationId,
       status: status ?? this.status,
       error: error is String? ? error : this.error,
-      deviceId: deviceId ?? this.deviceId,
-      device: device is _i3.Device? ? device : this.device?.copyWith(),
+      topic: topic is String? ? topic : this.topic,
       attemptAt: attemptAt ?? this.attemptAt,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
