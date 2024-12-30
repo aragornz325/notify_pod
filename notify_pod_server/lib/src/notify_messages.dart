@@ -2,7 +2,6 @@ import 'package:notify_pod_server/src/endpoints/messages/notificacion_push_endpo
 import 'package:serverpod/serverpod.dart';
 
 class NotifyMessages {
-
   /// Send a push notification to specific user.
   /// the notification will be sent to all devices of the user.
   /// [session] the session of the user sending the notification.
@@ -34,7 +33,7 @@ class NotifyMessages {
   /// [topic] the topic to send the notification to.
   /// [title] the title of the notification.
   /// [message] the message of the notification.
-  /// 
+  ///
   Future<bool> sendPushNotificationByTopic({
     required Session session,
     required String topic,
@@ -51,6 +50,29 @@ class NotifyMessages {
     } catch (e) {
       throw Exception(
         'Error in endpoint sendPushNotification: $e',
+      );
+    }
+  }
+
+
+  /// Register a user to a topic.
+  /// [session] the session of the user sending the notification.
+  /// [idToken] the token of the user to register.
+  /// [topic] the topic to register the user to.
+  Future<bool> registerUserInTopic({
+    required Session session,
+    required String idToken,
+    required String topic,
+  }) async {
+    try {
+      return await MessageEndpoint().registerUserInTopic(
+        session,
+        idToken,
+        topic,
+      );
+    } catch (e) {
+      throw Exception(
+        'Error in endpoint registerUserInTopic: $e',
       );
     }
   }

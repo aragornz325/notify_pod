@@ -43,4 +43,22 @@ class MessageEndpoint extends Endpoint with Controller<NotificacionPushServices>
       },
     );
   }
+
+  Future<bool> registerUserInTopic(
+    Session session,
+    String idToken,
+    String topic,
+  ) async {
+    return await performControllerOperation<bool>(
+      session: session,
+      endpointName: 'MessageEndpoint',
+      operation: () async {
+        return await service.registerUserToTopic(
+          session,
+          idToken: idToken,
+          topic: topic,
+        );
+      },
+    );
+  }
 }

@@ -1,0 +1,31 @@
+name: notify_pod_flutter
+description: notifier for serverpod.
+version: 1.0.0
+homepage: https://github.com/aragornz325/notify_pod
+repository: https://github.com/aragornz325/notify_pod
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+  flutter: '>=3.19.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  web: '>=0.3.0 <2.0.0'
+  notify_pod_client: 
+  device_info_plus: ^11.2.0
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+  freezed: 2.5.2
+  
+
+dev_dependencies:
+  serverpod_lints: 2.3.0
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.4.13
+  json_serializable: ^6.9.0
+
+dependency_overrides:
+  notify_pod_client:
+    path: ../notify_pod_client

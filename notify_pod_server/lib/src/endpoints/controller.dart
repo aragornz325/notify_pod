@@ -6,6 +6,7 @@ import 'package:serverpod/serverpod.dart';
 
 mixin Controller<T extends Service> {
   /// Getter para clase [Servicio] vinculada.
+
   T get service => getIt.get<T>();
 
   final logger = Logger('Notify Endpoint');

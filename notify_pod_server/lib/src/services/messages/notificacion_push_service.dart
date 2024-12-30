@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:dart_firebase_admin/messaging.dart';
 import 'package:notify_pod_server/src/dependency_inyection/dependency_injection.dart';
 import 'package:notify_pod_server/src/generated/protocol.dart';
 import 'package:notify_pod_server/src/services/devices/devices_service.dart';
 import 'package:notify_pod_server/src/services/service.dart';
 import 'package:serverpod/serverpod.dart';
+import 'package:http/http.dart' as http;
 
 class NotificacionPushServices extends Service {
   final Messaging _messaging = getIt.get<Messaging>();
@@ -225,6 +228,52 @@ class NotificacionPushServices extends Service {
         },
       );
       return false;
+    }
+  }
+
+  Future<bool> registerUserToTopic(
+    Session session, {
+    required String idToken,
+    required String topic,
+  }) async {
+    try {
+      final url = 'https://iid.googleapis.com/iid/v1:batchAdd';
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $idToken',
+      };
+      final body = jsonEncode({
+        'to': '/topics/$topic',
+        'registration_tokens': [idToken],
+      });
+      final response = await http.post(
+        Uri.parse(
+          url,
+        ),
+        headers: headers,
+        body: body,
+      );
+      if (response.statusCode == 200) {
+        logger.fine(
+          'user registered to topic',
+        );
+      } else {
+        logger.shout(
+          'error: ${response.body}',
+        );
+        return false;
+      }
+      return true;
+    } catch (e, st) {
+      logger.shout(
+        'error: $e',
+        e,
+      );
+      throw NotifyPodException(
+        title: 'error on topic subscription ',
+        error: e.toString(),
+        stackTrace: st.toString(),
+      );
     }
   }
 }
