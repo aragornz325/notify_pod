@@ -195,9 +195,9 @@
     },
     {
       "name": "freezed",
-      "rootUri": "file:///Users/rodrigo.quintero/.pub-cache/hosted/pub.dev/freezed-2.5.7",
+      "rootUri": "file:///Users/rodrigo.quintero/.pub-cache/hosted/pub.dev/freezed-2.5.2",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "2.17"
     },
     {
       "name": "freezed_annotation",
@@ -542,7 +542,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-12-27T02:07:16.793796Z",
+  "generated": "2024-12-30T13:06:10.019621Z",
   "generator": "pub",
   "generatorVersion": "3.6.0",
   "flutterRoot": "file:///Users/rodrigo.quintero/flutter",
