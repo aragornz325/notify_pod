@@ -18,7 +18,7 @@ abstract class Device implements _i1.TableRow, _i1.ProtocolSerialization {
     this.id,
     required this.userId,
     required this.idDevice,
-    required this.type,
+    this.type,
     required this.tokenFCM,
     this.notificationsLogs,
     required this.createdAt,
@@ -29,7 +29,7 @@ abstract class Device implements _i1.TableRow, _i1.ProtocolSerialization {
     int? id,
     required String userId,
     required String idDevice,
-    required _i2.DevicesType type,
+    _i2.DevicesType? type,
     required String tokenFCM,
     List<_i3.NotificationsLogs>? notificationsLogs,
     required DateTime createdAt,
@@ -41,7 +41,9 @@ abstract class Device implements _i1.TableRow, _i1.ProtocolSerialization {
       id: jsonSerialization['id'] as int?,
       userId: jsonSerialization['userId'] as String,
       idDevice: jsonSerialization['idDevice'] as String,
-      type: _i2.DevicesType.fromJson((jsonSerialization['type'] as int)),
+      type: jsonSerialization['type'] == null
+          ? null
+          : _i2.DevicesType.fromJson((jsonSerialization['type'] as int)),
       tokenFCM: jsonSerialization['tokenFCM'] as String,
       notificationsLogs: (jsonSerialization['notificationsLogs'] as List?)
           ?.map((e) =>
@@ -65,7 +67,7 @@ abstract class Device implements _i1.TableRow, _i1.ProtocolSerialization {
 
   String idDevice;
 
-  _i2.DevicesType type;
+  _i2.DevicesType? type;
 
   String tokenFCM;
 
@@ -94,7 +96,7 @@ abstract class Device implements _i1.TableRow, _i1.ProtocolSerialization {
       if (id != null) 'id': id,
       'userId': userId,
       'idDevice': idDevice,
-      'type': type.toJson(),
+      if (type != null) 'type': type?.toJson(),
       'tokenFCM': tokenFCM,
       if (notificationsLogs != null)
         'notificationsLogs':
@@ -110,7 +112,7 @@ abstract class Device implements _i1.TableRow, _i1.ProtocolSerialization {
       if (id != null) 'id': id,
       'userId': userId,
       'idDevice': idDevice,
-      'type': type.toJson(),
+      if (type != null) 'type': type?.toJson(),
       'tokenFCM': tokenFCM,
       if (notificationsLogs != null)
         'notificationsLogs': notificationsLogs?.toJson(
@@ -158,7 +160,7 @@ class _DeviceImpl extends Device {
     int? id,
     required String userId,
     required String idDevice,
-    required _i2.DevicesType type,
+    _i2.DevicesType? type,
     required String tokenFCM,
     List<_i3.NotificationsLogs>? notificationsLogs,
     required DateTime createdAt,
@@ -179,7 +181,7 @@ class _DeviceImpl extends Device {
     Object? id = _Undefined,
     String? userId,
     String? idDevice,
-    _i2.DevicesType? type,
+    Object? type = _Undefined,
     String? tokenFCM,
     Object? notificationsLogs = _Undefined,
     DateTime? createdAt,
@@ -189,7 +191,7 @@ class _DeviceImpl extends Device {
       id: id is int? ? id : this.id,
       userId: userId ?? this.userId,
       idDevice: idDevice ?? this.idDevice,
-      type: type ?? this.type,
+      type: type is _i2.DevicesType? ? type : this.type,
       tokenFCM: tokenFCM ?? this.tokenFCM,
       notificationsLogs: notificationsLogs is List<_i3.NotificationsLogs>?
           ? notificationsLogs

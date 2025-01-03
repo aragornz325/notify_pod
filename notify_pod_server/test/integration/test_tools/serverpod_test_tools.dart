@@ -139,7 +139,6 @@ class _DeviceEndpoint {
     String tokenFCM,
     String userId,
     String deviceId,
-    _i4.DevicesType devicesType,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -156,7 +155,6 @@ class _DeviceEndpoint {
             'tokenFCM': tokenFCM,
             'userId': userId,
             'deviceId': deviceId,
-            'devicesType': devicesType,
           }),
           serializationManager: _serializationManager,
         );
@@ -238,6 +236,39 @@ class _MessageEndpoint {
             'topic': topic,
             'message': message,
             'title': title,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<bool>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<bool> registerUserInTopic(
+    _i1.TestSessionBuilder sessionBuilder,
+    String idToken,
+    String topic,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'message',
+        method: 'registerUserInTopic',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'message',
+          methodName: 'registerUserInTopic',
+          parameters: _i1.testObjectToJson({
+            'idToken': idToken,
+            'topic': topic,
           }),
           serializationManager: _serializationManager,
         );

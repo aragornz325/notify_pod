@@ -30,7 +30,6 @@ class NotifyDevices {
     required String tokenFCM,
     required String userId,
     required String deviceId,
-    required DevicesType devicesType,
   }) async {
     try {
       return await DeviceEndpoint().registerDevice(
@@ -38,7 +37,6 @@ class NotifyDevices {
         tokenFCM,
         userId,
         deviceId,
-        devicesType,
       );
     } catch (e) {
       throw Exception(

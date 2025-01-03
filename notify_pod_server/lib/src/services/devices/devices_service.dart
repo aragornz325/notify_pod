@@ -12,7 +12,6 @@ class DevicesService extends Service {
     required String tokenFCM,
     required String deviceId,
     required String userId,
-    required DevicesType devicesType,
   }) async {
     final now = DateTime.now().toUtc();
     final verificarDispositivo = await performOperation(
@@ -50,7 +49,6 @@ class DevicesService extends Service {
       userId: userId,
       tokenFCM: tokenFCM,
       idDevice: deviceId,
-      type: devicesType,
       createdAt: now,
       updatedAt: now,
     );

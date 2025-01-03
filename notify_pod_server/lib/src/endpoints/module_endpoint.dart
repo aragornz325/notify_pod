@@ -34,7 +34,6 @@ class ModuleEndpoint extends Endpoint with Controller<DevicesService> {
           deviceId: deviceId,
           tokenFCM: tokenFCM,
           userId: userId,
-          devicesType: devicesType,
         );
       },
     );

@@ -60,11 +60,6 @@ class Endpoints extends _i1.EndpointDispatch {
               type: _i1.getType<String>(),
               nullable: false,
             ),
-            'devicesType': _i1.ParameterDescription(
-              name: 'devicesType',
-              type: _i1.getType<_i5.DevicesType>(),
-              nullable: false,
-            ),
           },
           call: (
             _i1.Session session,
@@ -75,7 +70,6 @@ class Endpoints extends _i1.EndpointDispatch {
             params['tokenFCM'],
             params['userId'],
             params['deviceId'],
-            params['devicesType'],
           ),
         )
       },
@@ -144,6 +138,30 @@ class Endpoints extends _i1.EndpointDispatch {
             params['topic'],
             params['message'],
             params['title'],
+          ),
+        ),
+        'registerUserInTopic': _i1.MethodConnector(
+          name: 'registerUserInTopic',
+          params: {
+            'idToken': _i1.ParameterDescription(
+              name: 'idToken',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'topic': _i1.ParameterDescription(
+              name: 'topic',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['message'] as _i3.MessageEndpoint).registerUserInTopic(
+            session,
+            params['idToken'],
+            params['topic'],
           ),
         ),
       },

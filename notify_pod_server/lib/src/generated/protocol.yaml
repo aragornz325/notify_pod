@@ -3,6 +3,7 @@ device:
 message:
   - sendPushNotificationByUserId:
   - sendPushNotificationByTopic:
+  - registerUserInTopic:
 module:
   - hello:
   - registerFCMToken:

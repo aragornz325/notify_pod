@@ -69,8 +69,8 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'type',
           columnType: _i2.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'protocol:DevicesType',
+          isNullable: true,
+          dartType: 'protocol:DevicesType?',
         ),
         _i2.ColumnDefinition(
           name: 'tokenFCM',

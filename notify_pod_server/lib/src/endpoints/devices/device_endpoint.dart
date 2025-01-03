@@ -9,7 +9,6 @@ class DeviceEndpoint extends Endpoint with Controller<DevicesService> {
     String tokenFCM,
     String userId,
     String deviceId,
-    DevicesType devicesType,
   ) async {
     return await performControllerOperation<bool>(
       session: session,
@@ -20,7 +19,7 @@ class DeviceEndpoint extends Endpoint with Controller<DevicesService> {
           deviceId: deviceId,
           tokenFCM: tokenFCM,
           userId: userId,
-          devicesType: devicesType,
+         
         );
       },
     );

@@ -24,7 +24,6 @@ class EndpointDevice extends _i1.EndpointRef {
     String tokenFCM,
     String userId,
     String deviceId,
-    _i3.DevicesType devicesType,
   ) =>
       caller.callServerEndpoint<bool>(
         'notify_pod.device',
@@ -33,7 +32,6 @@ class EndpointDevice extends _i1.EndpointRef {
           'tokenFCM': tokenFCM,
           'userId': userId,
           'deviceId': deviceId,
-          'devicesType': devicesType,
         },
       );
 }
@@ -72,6 +70,19 @@ class EndpointMessage extends _i1.EndpointRef {
           'topic': topic,
           'message': message,
           'title': title,
+        },
+      );
+
+  _i2.Future<bool> registerUserInTopic(
+    String idToken,
+    String topic,
+  ) =>
+      caller.callServerEndpoint<bool>(
+        'notify_pod.message',
+        'registerUserInTopic',
+        {
+          'idToken': idToken,
+          'topic': topic,
         },
       );
 }

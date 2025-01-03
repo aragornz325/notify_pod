@@ -3,7 +3,7 @@ table: serverpod_devices_notify_pod
 fields:
   userId: String
   idDevice: String
-  type: DevicesType
+  type: DevicesType ?
   tokenFCM: String
   notificationsLogs: List<NotificationsLogs>?, relation(name=device_logs)
   createdAt: DateTime
