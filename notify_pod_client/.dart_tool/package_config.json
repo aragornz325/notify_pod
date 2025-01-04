@@ -140,10 +140,10 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2025-01-03T12:07:52.182547Z",
+  "generated": "2025-01-03T18:31:15.883851Z",
   "generator": "pub",
-  "generatorVersion": "3.6.0",
-  "flutterRoot": "file:///Users/rodrigo.quintero/flutter",
-  "flutterVersion": "3.27.1",
+  "generatorVersion": "3.5.3",
+  "flutterRoot": "file:///Users/rodrigo.quintero/fvm/versions/3.24.3",
+  "flutterVersion": "3.24.3",
   "pubCache": "file:///Users/rodrigo.quintero/.pub-cache"
 }
