@@ -25,7 +25,9 @@ class _NotificationBellState extends State<NotificationBell> {
     _notificationCount = widget.notificationCount;
 
     // Listener para mensajes de Firebase
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessage.listen((
+      RemoteMessage message,
+    ) {
       setState(() {
         _notificationCount++;
       });

@@ -7,7 +7,7 @@ CREATE TABLE "serverpod_devices_notify_pod" (
     "id" bigserial PRIMARY KEY,
     "userId" text NOT NULL,
     "idDevice" text NOT NULL,
-    "type" bigint NOT NULL,
+    "type" bigint,
     "tokenFCM" text NOT NULL,
     "createdAt" timestamp without time zone NOT NULL,
     "updatedAt" timestamp without time zone NOT NULL
@@ -341,9 +341,9 @@ ALTER TABLE ONLY "serverpod_query_log"
 -- MIGRATION VERSION FOR notify_pod
 --
 INSERT INTO "serverpod_migrations" ("module", "version", "timestamp")
-    VALUES ('notify_pod', '20241226031926049', now())
+    VALUES ('notify_pod', '20250106203005269', now())
     ON CONFLICT ("module")
-    DO UPDATE SET "version" = '20241226031926049', "timestamp" = now();
+    DO UPDATE SET "version" = '20250106203005269', "timestamp" = now();
 
 --
 -- MIGRATION VERSION FOR serverpod

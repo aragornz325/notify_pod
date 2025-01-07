@@ -493,10 +493,6 @@
     {
       "module": "serverpod",
       "version": "20240516151843329"
-    },
-    {
-      "module": "notify_pod",
-      "version": "20241226031926049"
     }
   ],
   "migrationApiVersion": 1

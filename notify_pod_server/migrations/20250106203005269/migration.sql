@@ -7,7 +7,7 @@ CREATE TABLE "serverpod_devices_notify_pod" (
     "id" bigserial PRIMARY KEY,
     "userId" text NOT NULL,
     "idDevice" text NOT NULL,
-    "type" bigint NOT NULL,
+    "type" bigint,
     "tokenFCM" text NOT NULL,
     "createdAt" timestamp without time zone NOT NULL,
     "updatedAt" timestamp without time zone NOT NULL
@@ -16,6 +16,23 @@ CREATE TABLE "serverpod_devices_notify_pod" (
 -- Indexes
 CREATE INDEX "idx_devices_userId" ON "serverpod_devices_notify_pod" USING btree ("userId");
 CREATE UNIQUE INDEX "idDevice" ON "serverpod_devices_notify_pod" USING btree ("idDevice");
+
+--
+-- ACTION CREATE TABLE
+--
+CREATE TABLE "serverpod_notifications_by_topic_logs" (
+    "id" bigserial PRIMARY KEY,
+    "notificationId" bigint NOT NULL,
+    "status" bigint NOT NULL,
+    "error" text,
+    "topic" text,
+    "attemptAt" timestamp without time zone NOT NULL,
+    "createdAt" timestamp without time zone NOT NULL,
+    "updatedAt" timestamp without time zone NOT NULL
+);
+
+-- Indexes
+CREATE INDEX "idx_logs_topic_notificationId" ON "serverpod_notifications_by_topic_logs" USING btree ("notificationId");
 
 --
 -- ACTION CREATE TABLE
@@ -53,6 +70,25 @@ CREATE TABLE "serverpod_push_notificacion" (
 -- Indexes
 CREATE INDEX "idx_notifications_userId" ON "serverpod_push_notificacion" USING btree ("userId");
 CREATE INDEX "idx_notifications_status" ON "serverpod_push_notificacion" USING btree ("status");
+
+--
+-- ACTION CREATE TABLE
+--
+CREATE TABLE "serverpod_push_notificacion_by_topic" (
+    "id" bigserial PRIMARY KEY,
+    "title" text NOT NULL,
+    "message" text NOT NULL,
+    "topic" text NOT NULL,
+    "sendAt" timestamp without time zone NOT NULL,
+    "status" bigint NOT NULL,
+    "readAt" timestamp without time zone,
+    "createdAt" timestamp without time zone NOT NULL,
+    "updatedAt" timestamp without time zone NOT NULL
+);
+
+-- Indexes
+CREATE INDEX "idx_notifications_topic" ON "serverpod_push_notificacion_by_topic" USING btree ("topic");
+CREATE INDEX "idx_notifications_topic_status" ON "serverpod_push_notificacion_by_topic" USING btree ("status");
 
 --
 -- ACTION CREATE TABLE
@@ -305,9 +341,9 @@ ALTER TABLE ONLY "serverpod_query_log"
 -- MIGRATION VERSION FOR notify_pod
 --
 INSERT INTO "serverpod_migrations" ("module", "version", "timestamp")
-    VALUES ('notify_pod', '20241226022747541', now())
+    VALUES ('notify_pod', '20250106203005269', now())
     ON CONFLICT ("module")
-    DO UPDATE SET "version" = '20241226022747541', "timestamp" = now();
+    DO UPDATE SET "version" = '20250106203005269', "timestamp" = now();
 
 --
 -- MIGRATION VERSION FOR serverpod

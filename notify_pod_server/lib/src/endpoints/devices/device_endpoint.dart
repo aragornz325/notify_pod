@@ -1,5 +1,4 @@
 import 'package:notify_pod_server/src/endpoints/controller.dart';
-import 'package:notify_pod_server/src/generated/protocol.dart';
 import 'package:notify_pod_server/src/services/devices/devices_service.dart';
 import 'package:serverpod/serverpod.dart';
 
