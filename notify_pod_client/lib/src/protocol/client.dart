@@ -37,6 +37,31 @@ class EndpointDevice extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
+class EndpointEmailpod extends _i1.EndpointRef {
+  EndpointEmailpod(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'notify_pod.emailpod';
+
+  _i2.Future<bool> sendEmail(
+    List<String> email,
+    String subject,
+    String body,
+    String logoUuid,
+  ) =>
+      caller.callServerEndpoint<bool>(
+        'notify_pod.emailpod',
+        'sendEmail',
+        {
+          'email': email,
+          'subject': subject,
+          'body': body,
+          'logoUuid': logoUuid,
+        },
+      );
+}
+
+/// {@category Endpoint}
 class EndpointMessage extends _i1.EndpointRef {
   EndpointMessage(_i1.EndpointCaller caller) : super(caller);
 
@@ -121,11 +146,14 @@ class EndpointModule extends _i1.EndpointRef {
 class Caller extends _i1.ModuleEndpointCaller {
   Caller(_i1.ServerpodClientShared client) : super(client) {
     device = EndpointDevice(this);
+    emailpod = EndpointEmailpod(this);
     message = EndpointMessage(this);
     module = EndpointModule(this);
   }
 
   late final EndpointDevice device;
+
+  late final EndpointEmailpod emailpod;
 
   late final EndpointMessage message;
 
@@ -134,6 +162,7 @@ class Caller extends _i1.ModuleEndpointCaller {
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
         'notify_pod.device': device,
+        'notify_pod.emailpod': emailpod,
         'notify_pod.message': message,
         'notify_pod.module': module,
       };

@@ -5,7 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:notify_pod_server/src/generated/protocol.dart';
 
 abstract class Service {
-  final Logger logger = Logger('service');
+  final Logger logger = Logger('service NotifyPod');
 
   Future<T> performOperation<T>({
     required String operationName,

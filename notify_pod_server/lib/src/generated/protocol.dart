@@ -12,16 +12,18 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'devices/devices.dart' as _i3;
-import 'enums/devices_type.dart' as _i4;
-import 'enums/notification_status.dart' as _i5;
-import 'enums/notify_environment.dart' as _i6;
-import 'exceptions/notify_pod_exception.dart' as _i7;
-import 'logs/notifications_by_topic_logs.dart' as _i8;
-import 'logs/notifications_logs.dart' as _i9;
-import 'message/notificacion_push.dart' as _i10;
-import 'message/notificacion_push_by_topic.dart' as _i11;
-import 'module_class.dart' as _i12;
+import 'email/email.dart' as _i4;
+import 'enums/devices_type.dart' as _i5;
+import 'enums/notification_status.dart' as _i6;
+import 'enums/notify_environment.dart' as _i7;
+import 'exceptions/notify_pod_exception.dart' as _i8;
+import 'logs/notifications_by_topic_logs.dart' as _i9;
+import 'logs/notifications_logs.dart' as _i10;
+import 'message/notificacion_push.dart' as _i11;
+import 'message/notificacion_push_by_topic.dart' as _i12;
+import 'module_class.dart' as _i13;
 export 'devices/devices.dart';
+export 'email/email.dart';
 export 'enums/devices_type.dart';
 export 'enums/notification_status.dart';
 export 'enums/notify_environment.dart';
@@ -220,6 +222,93 @@ class Protocol extends _i1.SerializationManagerServer {
           isUnique: false,
           isPrimary: false,
         ),
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'serverpod_notifications_emails',
+      dartName: 'EmailPod',
+      schema: 'public',
+      module: 'notify_pod',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault:
+              'nextval(\'serverpod_notifications_emails_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'email',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'subject',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'body',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+        _i2.ColumnDefinition(
+          name: 'emailStatus',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'protocol:NotificationStatus',
+        ),
+        _i2.ColumnDefinition(
+          name: 'logoUuid',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'sentAt',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'followUpAt',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'readOn',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+      ],
+      foreignKeys: [],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'serverpod_notifications_emails_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
       ],
       managed: true,
     ),
@@ -553,71 +642,81 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i3.Device) {
       return _i3.Device.fromJson(data) as T;
     }
-    if (t == _i4.DevicesType) {
-      return _i4.DevicesType.fromJson(data) as T;
+    if (t == _i4.EmailPod) {
+      return _i4.EmailPod.fromJson(data) as T;
     }
-    if (t == _i5.NotificationStatus) {
-      return _i5.NotificationStatus.fromJson(data) as T;
+    if (t == _i5.DevicesType) {
+      return _i5.DevicesType.fromJson(data) as T;
     }
-    if (t == _i6.NotifyEnvironment) {
-      return _i6.NotifyEnvironment.fromJson(data) as T;
+    if (t == _i6.NotificationStatus) {
+      return _i6.NotificationStatus.fromJson(data) as T;
     }
-    if (t == _i7.NotifyPodException) {
-      return _i7.NotifyPodException.fromJson(data) as T;
+    if (t == _i7.NotifyEnvironment) {
+      return _i7.NotifyEnvironment.fromJson(data) as T;
     }
-    if (t == _i8.NotificationsByTopicLogs) {
-      return _i8.NotificationsByTopicLogs.fromJson(data) as T;
+    if (t == _i8.NotifyPodException) {
+      return _i8.NotifyPodException.fromJson(data) as T;
     }
-    if (t == _i9.NotificationsLogs) {
-      return _i9.NotificationsLogs.fromJson(data) as T;
+    if (t == _i9.NotificationsByTopicLogs) {
+      return _i9.NotificationsByTopicLogs.fromJson(data) as T;
     }
-    if (t == _i10.NotificacionPush) {
-      return _i10.NotificacionPush.fromJson(data) as T;
+    if (t == _i10.NotificationsLogs) {
+      return _i10.NotificationsLogs.fromJson(data) as T;
     }
-    if (t == _i11.NotificacionPushByTopic) {
-      return _i11.NotificacionPushByTopic.fromJson(data) as T;
+    if (t == _i11.NotificacionPush) {
+      return _i11.NotificacionPush.fromJson(data) as T;
     }
-    if (t == _i12.ModuleClass) {
-      return _i12.ModuleClass.fromJson(data) as T;
+    if (t == _i12.NotificacionPushByTopic) {
+      return _i12.NotificacionPushByTopic.fromJson(data) as T;
+    }
+    if (t == _i13.ModuleClass) {
+      return _i13.ModuleClass.fromJson(data) as T;
     }
     if (t == _i1.getType<_i3.Device?>()) {
       return (data != null ? _i3.Device.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i4.DevicesType?>()) {
-      return (data != null ? _i4.DevicesType.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i4.EmailPod?>()) {
+      return (data != null ? _i4.EmailPod.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i5.NotificationStatus?>()) {
-      return (data != null ? _i5.NotificationStatus.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i5.DevicesType?>()) {
+      return (data != null ? _i5.DevicesType.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i6.NotifyEnvironment?>()) {
-      return (data != null ? _i6.NotifyEnvironment.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i6.NotificationStatus?>()) {
+      return (data != null ? _i6.NotificationStatus.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i7.NotifyPodException?>()) {
-      return (data != null ? _i7.NotifyPodException.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i7.NotifyEnvironment?>()) {
+      return (data != null ? _i7.NotifyEnvironment.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i8.NotificationsByTopicLogs?>()) {
-      return (data != null ? _i8.NotificationsByTopicLogs.fromJson(data) : null)
+    if (t == _i1.getType<_i8.NotifyPodException?>()) {
+      return (data != null ? _i8.NotifyPodException.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i9.NotificationsByTopicLogs?>()) {
+      return (data != null ? _i9.NotificationsByTopicLogs.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i9.NotificationsLogs?>()) {
-      return (data != null ? _i9.NotificationsLogs.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i10.NotificationsLogs?>()) {
+      return (data != null ? _i10.NotificationsLogs.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i10.NotificacionPush?>()) {
-      return (data != null ? _i10.NotificacionPush.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i11.NotificacionPush?>()) {
+      return (data != null ? _i11.NotificacionPush.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i11.NotificacionPushByTopic?>()) {
-      return (data != null ? _i11.NotificacionPushByTopic.fromJson(data) : null)
+    if (t == _i1.getType<_i12.NotificacionPushByTopic?>()) {
+      return (data != null ? _i12.NotificacionPushByTopic.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i12.ModuleClass?>()) {
-      return (data != null ? _i12.ModuleClass.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i13.ModuleClass?>()) {
+      return (data != null ? _i13.ModuleClass.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<List<_i9.NotificationsLogs>?>()) {
+    if (t == _i1.getType<List<_i10.NotificationsLogs>?>()) {
       return (data != null
           ? (data as List)
-              .map((e) => deserialize<_i9.NotificationsLogs>(e))
+              .map((e) => deserialize<_i10.NotificationsLogs>(e))
               .toList()
           : null) as dynamic;
+    }
+    if (t == List<String>) {
+      return (data as List).map((e) => deserialize<String>(e)).toList()
+          as dynamic;
     }
     try {
       return _i2.Protocol().deserialize<T>(data, t);
@@ -632,31 +731,34 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i3.Device) {
       return 'Device';
     }
-    if (data is _i4.DevicesType) {
+    if (data is _i4.EmailPod) {
+      return 'EmailPod';
+    }
+    if (data is _i5.DevicesType) {
       return 'DevicesType';
     }
-    if (data is _i5.NotificationStatus) {
+    if (data is _i6.NotificationStatus) {
       return 'NotificationStatus';
     }
-    if (data is _i6.NotifyEnvironment) {
+    if (data is _i7.NotifyEnvironment) {
       return 'NotifyEnvironment';
     }
-    if (data is _i7.NotifyPodException) {
+    if (data is _i8.NotifyPodException) {
       return 'NotifyPodException';
     }
-    if (data is _i8.NotificationsByTopicLogs) {
+    if (data is _i9.NotificationsByTopicLogs) {
       return 'NotificationsByTopicLogs';
     }
-    if (data is _i9.NotificationsLogs) {
+    if (data is _i10.NotificationsLogs) {
       return 'NotificationsLogs';
     }
-    if (data is _i10.NotificacionPush) {
+    if (data is _i11.NotificacionPush) {
       return 'NotificacionPush';
     }
-    if (data is _i11.NotificacionPushByTopic) {
+    if (data is _i12.NotificacionPushByTopic) {
       return 'NotificacionPushByTopic';
     }
-    if (data is _i12.ModuleClass) {
+    if (data is _i13.ModuleClass) {
       return 'ModuleClass';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -675,32 +777,35 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'Device') {
       return deserialize<_i3.Device>(data['data']);
     }
+    if (dataClassName == 'EmailPod') {
+      return deserialize<_i4.EmailPod>(data['data']);
+    }
     if (dataClassName == 'DevicesType') {
-      return deserialize<_i4.DevicesType>(data['data']);
+      return deserialize<_i5.DevicesType>(data['data']);
     }
     if (dataClassName == 'NotificationStatus') {
-      return deserialize<_i5.NotificationStatus>(data['data']);
+      return deserialize<_i6.NotificationStatus>(data['data']);
     }
     if (dataClassName == 'NotifyEnvironment') {
-      return deserialize<_i6.NotifyEnvironment>(data['data']);
+      return deserialize<_i7.NotifyEnvironment>(data['data']);
     }
     if (dataClassName == 'NotifyPodException') {
-      return deserialize<_i7.NotifyPodException>(data['data']);
+      return deserialize<_i8.NotifyPodException>(data['data']);
     }
     if (dataClassName == 'NotificationsByTopicLogs') {
-      return deserialize<_i8.NotificationsByTopicLogs>(data['data']);
+      return deserialize<_i9.NotificationsByTopicLogs>(data['data']);
     }
     if (dataClassName == 'NotificationsLogs') {
-      return deserialize<_i9.NotificationsLogs>(data['data']);
+      return deserialize<_i10.NotificationsLogs>(data['data']);
     }
     if (dataClassName == 'NotificacionPush') {
-      return deserialize<_i10.NotificacionPush>(data['data']);
+      return deserialize<_i11.NotificacionPush>(data['data']);
     }
     if (dataClassName == 'NotificacionPushByTopic') {
-      return deserialize<_i11.NotificacionPushByTopic>(data['data']);
+      return deserialize<_i12.NotificacionPushByTopic>(data['data']);
     }
     if (dataClassName == 'ModuleClass') {
-      return deserialize<_i12.ModuleClass>(data['data']);
+      return deserialize<_i13.ModuleClass>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
@@ -720,14 +825,16 @@ class Protocol extends _i1.SerializationManagerServer {
     switch (t) {
       case _i3.Device:
         return _i3.Device.t;
-      case _i8.NotificationsByTopicLogs:
-        return _i8.NotificationsByTopicLogs.t;
-      case _i9.NotificationsLogs:
-        return _i9.NotificationsLogs.t;
-      case _i10.NotificacionPush:
-        return _i10.NotificacionPush.t;
-      case _i11.NotificacionPushByTopic:
-        return _i11.NotificacionPushByTopic.t;
+      case _i4.EmailPod:
+        return _i4.EmailPod.t;
+      case _i9.NotificationsByTopicLogs:
+        return _i9.NotificationsByTopicLogs.t;
+      case _i10.NotificationsLogs:
+        return _i10.NotificationsLogs.t;
+      case _i11.NotificacionPush:
+        return _i11.NotificacionPush.t;
+      case _i12.NotificacionPushByTopic:
+        return _i12.NotificacionPushByTopic.t;
     }
     return null;
   }

@@ -97,6 +97,8 @@ void withServerpod(
 class TestEndpoints {
   late final _DeviceEndpoint device;
 
+  late final _EmailpodEndpoint emailpod;
+
   late final _MessageEndpoint message;
 
   late final _ModuleEndpoint module;
@@ -110,6 +112,10 @@ class _InternalTestEndpoints extends TestEndpoints
     _i2.EndpointDispatch endpoints,
   ) {
     device = _DeviceEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    emailpod = _EmailpodEndpoint(
       endpoints,
       serializationManager,
     );
@@ -155,6 +161,54 @@ class _DeviceEndpoint {
             'tokenFCM': tokenFCM,
             'userId': userId,
             'deviceId': deviceId,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<bool>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _EmailpodEndpoint {
+  _EmailpodEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _i2.EndpointDispatch _endpointDispatch;
+
+  final _i2.SerializationManager _serializationManager;
+
+  _i3.Future<bool> sendEmail(
+    _i1.TestSessionBuilder sessionBuilder,
+    List<String> email,
+    String subject,
+    String body,
+    String logoUuid,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'emailpod',
+        method: 'sendEmail',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'emailpod',
+          methodName: 'sendEmail',
+          parameters: _i1.testObjectToJson({
+            'email': email,
+            'subject': subject,
+            'body': body,
+            'logoUuid': logoUuid,
           }),
           serializationManager: _serializationManager,
         );

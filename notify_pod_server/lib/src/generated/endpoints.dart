@@ -11,9 +11,10 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../endpoints/devices/device_endpoint.dart' as _i2;
-import '../endpoints/messages/notificacion_push_endpoint.dart' as _i3;
-import '../endpoints/module_endpoint.dart' as _i4;
-import 'package:notify_pod_server/src/generated/enums/devices_type.dart' as _i5;
+import '../endpoints/email/email.endpoint.dart' as _i3;
+import '../endpoints/messages/notificacion_push_endpoint.dart' as _i4;
+import '../endpoints/module_endpoint.dart' as _i5;
+import 'package:notify_pod_server/src/generated/enums/devices_type.dart' as _i6;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -25,13 +26,19 @@ class Endpoints extends _i1.EndpointDispatch {
           'device',
           'notify_pod',
         ),
-      'message': _i3.MessageEndpoint()
+      'emailpod': _i3.EmailpodEndpoint()
+        ..initialize(
+          server,
+          'emailpod',
+          'notify_pod',
+        ),
+      'message': _i4.MessageEndpoint()
         ..initialize(
           server,
           'message',
           'notify_pod',
         ),
-      'module': _i4.ModuleEndpoint()
+      'module': _i5.ModuleEndpoint()
         ..initialize(
           server,
           'module',
@@ -74,6 +81,48 @@ class Endpoints extends _i1.EndpointDispatch {
         )
       },
     );
+    connectors['emailpod'] = _i1.EndpointConnector(
+      name: 'emailpod',
+      endpoint: endpoints['emailpod']!,
+      methodConnectors: {
+        'sendEmail': _i1.MethodConnector(
+          name: 'sendEmail',
+          params: {
+            'email': _i1.ParameterDescription(
+              name: 'email',
+              type: _i1.getType<List<String>>(),
+              nullable: false,
+            ),
+            'subject': _i1.ParameterDescription(
+              name: 'subject',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'body': _i1.ParameterDescription(
+              name: 'body',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'logoUuid': _i1.ParameterDescription(
+              name: 'logoUuid',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['emailpod'] as _i3.EmailpodEndpoint).sendEmail(
+            session,
+            params['email'],
+            params['subject'],
+            params['body'],
+            params['logoUuid'],
+          ),
+        )
+      },
+    );
     connectors['message'] = _i1.EndpointConnector(
       name: 'message',
       endpoint: endpoints['message']!,
@@ -101,7 +150,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['message'] as _i3.MessageEndpoint)
+              (endpoints['message'] as _i4.MessageEndpoint)
                   .sendPushNotificationByUserId(
             session,
             params['userId'],
@@ -132,7 +181,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['message'] as _i3.MessageEndpoint)
+              (endpoints['message'] as _i4.MessageEndpoint)
                   .sendPushNotificationByTopic(
             session,
             params['topic'],
@@ -158,7 +207,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['message'] as _i3.MessageEndpoint).registerUserInTopic(
+              (endpoints['message'] as _i4.MessageEndpoint).registerUserInTopic(
             session,
             params['idToken'],
             params['topic'],
@@ -183,7 +232,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['module'] as _i4.ModuleEndpoint).hello(
+              (endpoints['module'] as _i5.ModuleEndpoint).hello(
             session,
             params['name'],
           ),
@@ -208,7 +257,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'devicesType': _i1.ParameterDescription(
               name: 'devicesType',
-              type: _i1.getType<_i5.DevicesType>(),
+              type: _i1.getType<_i6.DevicesType>(),
               nullable: false,
             ),
           },
@@ -216,7 +265,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['module'] as _i4.ModuleEndpoint).registerFCMToken(
+              (endpoints['module'] as _i5.ModuleEndpoint).registerFCMToken(
             session,
             params['tokenFCM'],
             params['userId'],

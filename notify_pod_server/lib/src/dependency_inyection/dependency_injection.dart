@@ -5,7 +5,9 @@ import 'package:get_it/get_it.dart';
 import 'package:dart_firebase_admin/auth.dart';
 import 'package:dart_firebase_admin/messaging.dart';
 import 'package:notify_pod_server/src/services/devices/devices_service.dart';
+import 'package:notify_pod_server/src/services/mail/mails_service.dart';
 import 'package:notify_pod_server/src/services/messages/notificacion_push_service.dart';
+import 'package:notify_pod_server/src/utiles/check_depenci_is_registered.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -13,34 +15,41 @@ void setupNotifyDependencies({
   required FirebaseAdminApp admin,
   required FirebaseCloudMessagingApi clientFMCApi,
 }) async {
-  Auth auth = Auth(
-    admin,
-  );
-  Messaging messaging = Messaging(
-    admin,
-  );
+  Auth auth = Auth(admin);
+  Messaging messaging = Messaging(admin);
 
-  //firebase services
-  getIt.registerSingleton<Auth>(
+  // Firebase services
+  registerIfNotRegistered<Auth>(
     auth,
+    'Auth',
   );
-  getIt.registerSingleton<FirebaseAdminApp>(
+  registerIfNotRegistered<FirebaseAdminApp>(
     admin,
+    'FirebaseAdminApp',
   );
-  getIt.registerSingleton<Messaging>(
+  registerIfNotRegistered<Messaging>(
     messaging,
+    'Messaging',
   );
 
-  //firebaseapis services
-  getIt.registerSingleton<FirebaseCloudMessagingApi>(
+  // Firebaseapis services
+  registerIfNotRegistered<FirebaseCloudMessagingApi>(
     clientFMCApi,
+    'FirebaseCloudMessagingApi',
   );
 
-  //notify_por services
-  getIt.registerSingleton<DevicesService>(
+  // Notify pod services
+  registerIfNotRegistered<DevicesService>(
     DevicesService(),
+    'DevicesService',
   );
-  getIt.registerSingleton<NotificacionPushServices>(
+  registerIfNotRegistered<NotificacionPushServices>(
     NotificacionPushServices(),
+    'NotificacionPushServices',
+  );
+
+  registerIfNotRegistered<EmailPodServices>(
+    EmailPodServices(),
+    'EmailsService',
   );
 }

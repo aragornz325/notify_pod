@@ -1,0 +1,12 @@
+class: EmailPod
+table: serverpod_notifications_emails
+fields:
+    email: String
+    subject: String
+    body: String
+    createdAt: DateTime
+    emailStatus: NotificationStatus
+    logoUuid: String
+    sentAt: DateTime ?
+    followUpAt: DateTime ?
+    readOn: DateTime ?
