@@ -2,6 +2,7 @@ device:
   - registerDevice:
 emailpod:
   - sendEmail:
+  - confirmEmailRead:
 message:
   - sendPushNotificationByUserId:
   - sendPushNotificationByTopic:

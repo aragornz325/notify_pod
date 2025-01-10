@@ -1,7 +1,9 @@
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:mailer/mailer.dart';
 import 'package:notify_pod_server/src/services/service.dart';
 import 'package:notify_pod_server/src/generated/protocol.dart';
 import 'package:notify_pod_server/src/utiles/constants.dart';
+import 'package:notify_pod_server/src/utiles/templates/made_with_love.dart';
 import 'package:serverpod/serverpod.dart';
 
 class EmailPodServices extends Service {
@@ -11,6 +13,7 @@ class EmailPodServices extends Service {
     required String subject,
     required String body,
     required String logoUuid,
+    required String secretKey,
   }) async {
     final now = DateTime.now().toUtc();
 
@@ -37,25 +40,51 @@ class EmailPodServices extends Service {
         logoUuid: logoUuid,
       );
 
-      int? emailRecordId;
-
-      try {
-        final emailRegister = await EmailPod.db.insert(
-          session,
-          [mailRecord],
-        );
-        logger.info(
-          '''Email record created for ${emailAddress.trim()} 
+      final emailRegister = await EmailPod.db.insert(
+        session,
+        [
+          mailRecord.copyWith(
+            body: body,
+          ),
+        ],
+      );
+      logger.info(
+        '''Email record created for ${emailAddress.trim()} 
           with id: ${emailRegister.first.id}''',
+      );
+      if (emailRegister.isEmpty || emailRegister.first.id == null) {
+        logger.info(
+          'Fail to create email record for ${emailAddress.trim()}',
         );
-        // Save the id for later use
-        emailRecordId = emailRegister.first.id;
+        allEmailsSent = false;
+        continue;
+      }
+      final int emailRecordId = emailRegister.first.id!;
+      try {
+        final slug = JWT(
+          {
+            'email': emailAddress.trim(),
+            'emailRecordId': emailRecordId,
+            'logoUuid': logoUuid,
+          },
+          issuer: 'notify_pod_server',
+        ).sign(
+          SecretKey(
+            secretKey,
+          ),
+        );
+
+        final templateHtml = madeWithLove(
+          imageUrl: "http://localhost:8082/returnimage?slug=$slug",
+          token: slug,
+        );
 
         // Send the email
         message.recipients.clear();
         message.recipients.add(
           emailAddress.trim(),
         );
+        message.html = templateHtml;
         await send(
           message,
           smtpServer,
@@ -66,24 +95,26 @@ class EmailPodServices extends Service {
         emailRegister.first.sentAt = DateTime.now().toUtc();
         await EmailPod.db.update(
           session,
-          [emailRegister.first],
+          [
+            emailRegister.first.copyWith(
+              body: templateHtml,
+            ),
+          ],
         );
       } catch (e) {
         // Handle error and update status to FAILED
-        if (emailRecordId != null) {
-          final emailRecord = await EmailPod.db.findById(
-            session,
-            emailRecordId,
-          );
+        final emailRecord = await EmailPod.db.findById(
+          session,
+          emailRecordId,
+        );
 
-          await EmailPod.db.updateRow(
-            session,
-            emailRecord!.copyWith(
-              emailStatus: NotificationStatus.FAILED,
-              sentAt: DateTime.now().toUtc(),
-            ),
-          );
-        }
+        await EmailPod.db.updateRow(
+          session,
+          emailRecord!.copyWith(
+            emailStatus: NotificationStatus.FAILED,
+            sentAt: DateTime.now().toUtc(),
+          ),
+        );
 
         // Log del error
         logger.info(
@@ -97,5 +128,52 @@ class EmailPodServices extends Service {
 
     // Return the result
     return allEmailsSent;
+  }
+
+  Future<void> confirmEmailRead({
+    required Session session,
+    required String slugToken,
+    required String secretKey,
+  }) async {
+    final sign = SecretKey(secretKey);
+    final jwt = JWT.verify(
+      slugToken,
+      sign,
+    );
+
+    logger.info('JWT payload: ${jwt.payload}');
+    final email = jwt.payload['email'];
+    final emailRecordId = jwt.payload['emailRecordId'];
+
+    if (email == null || emailRecordId == null) {
+      throw Exception('Invalid token');
+    }
+
+    final EmailPod? emailRecord = await performOperation(
+      operationName: 'get email record',
+      operation: () async {
+        return await EmailPod.db.findById(
+          session,
+          emailRecordId,
+        );
+      },
+    );
+
+    if (emailRecord == null) {
+      throw Exception('Email record not found');
+    }
+
+    await performOperation(
+      operationName: 'update email status',
+      operation: () async {
+        await EmailPod.db.updateRow(
+          session,
+          emailRecord.copyWith(
+            emailStatus: NotificationStatus.READ,
+            readOn: DateTime.now().toUtc(),
+          ),
+        );
+      },
+    );
   }
 }

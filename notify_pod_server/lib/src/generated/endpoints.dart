@@ -108,6 +108,11 @@ class Endpoints extends _i1.EndpointDispatch {
               type: _i1.getType<String>(),
               nullable: false,
             ),
+            'secretKey': _i1.ParameterDescription(
+              name: 'secretKey',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
           },
           call: (
             _i1.Session session,
@@ -119,8 +124,33 @@ class Endpoints extends _i1.EndpointDispatch {
             params['subject'],
             params['body'],
             params['logoUuid'],
+            params['secretKey'],
           ),
-        )
+        ),
+        'confirmEmailRead': _i1.MethodConnector(
+          name: 'confirmEmailRead',
+          params: {
+            'slugToken': _i1.ParameterDescription(
+              name: 'slugToken',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'secretKey': _i1.ParameterDescription(
+              name: 'secretKey',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['emailpod'] as _i3.EmailpodEndpoint).confirmEmailRead(
+            session,
+            params['slugToken'],
+            params['secretKey'],
+          ),
+        ),
       },
     );
     connectors['message'] = _i1.EndpointConnector(

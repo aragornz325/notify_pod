@@ -43,11 +43,13 @@ class EndpointEmailpod extends _i1.EndpointRef {
   @override
   String get name => 'notify_pod.emailpod';
 
+  /// send email to the user with the given email
   _i2.Future<bool> sendEmail(
     List<String> email,
     String subject,
     String body,
     String logoUuid,
+    String secretKey,
   ) =>
       caller.callServerEndpoint<bool>(
         'notify_pod.emailpod',
@@ -57,6 +59,20 @@ class EndpointEmailpod extends _i1.EndpointRef {
           'subject': subject,
           'body': body,
           'logoUuid': logoUuid,
+          'secretKey': secretKey,
+        },
+      );
+
+  _i2.Future<bool> confirmEmailRead(
+    String slugToken,
+    String secretKey,
+  ) =>
+      caller.callServerEndpoint<bool>(
+        'notify_pod.emailpod',
+        'confirmEmailRead',
+        {
+          'slugToken': slugToken,
+          'secretKey': secretKey,
         },
       );
 }
