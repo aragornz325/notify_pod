@@ -9,3 +9,7 @@
 - Removed the deviceType enum.
 - Determining the device type is no longer required.
 - The device type is now automatically detected.
+
+# 1.0.2
+
+- bug fix
