@@ -9,3 +9,8 @@
 - Removed the deviceType enum.
 - Determining the device type is no longer required.
 - The device type is now automatically detected.
+
+## 1.1.0
+
+- Add a send email feature
+- Add a tracking email feature

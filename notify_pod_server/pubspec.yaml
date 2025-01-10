@@ -1,6 +1,6 @@
 name: notify_pod_server
 description: Starting point for a Serverpod module.
-version: 1.0.0
+version: 1.1.0
 homepage: https://github.com/aragornz325/notify_pod
 repository: https://github.com/aragornz325/notify_pod
 
