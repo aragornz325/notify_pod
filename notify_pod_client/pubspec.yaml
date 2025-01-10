@@ -1,6 +1,6 @@
 name: notify_pod_client
 description: Starting point for a Serverpod module client.
-version: 1.0.0
+version: 1.0.2
 homepage: https://github.com/aragornz325/notify_pod
 repository: https://github.com/aragornz325/notify_pod
 
