@@ -8,3 +8,8 @@
 
 - Added NotificationBell widget for easy integration of notification indicators in app bars.
 - The widget dynamically updates the notification count using Firebase Cloud Messaging.
+
+## 1.1.0
+
+- Add a send email feature
+- Add a tracking email feature
